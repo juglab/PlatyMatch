@@ -1,0 +1,6 @@
+@article{lalit2020platymatch,
+  title={Registration of multi-modal volumetric images of embryos by establishing correspondences between cells},
+  author={Lalit, Manan and Jug, Florian and Tomancak, Pavel},
+  year={2020},
+  booktitle={Workshop on BioImage Computing (BIC) @ European Conference on Computer Vision (ECCV), 2020}
+}
