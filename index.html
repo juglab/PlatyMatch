@@ -106,22 +106,26 @@
         background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
     }
 
-    
+    .relative{position:relative; text-align: center; color: black;}
 
+    .absolute-text-1{position:absolute; top:8px; left: 100px; }
+    .absolute-text-2{position:absolute; bottom:550px; left: 100px; }
+    .absolute-text-3{position:absolute; bottom:550px; right: 370px; }
+    .absolute-text-4{position:absolute; top: 10px; left: 40px; color : white;} 
 </style>
 
 <html>
   <head>
-        <title>PPN2V</title>
-        <meta property="og:title" content="Fully Unsupervised Probabilistic Noise2Void" />
-        <meta property="og:image" content="https://juglab.github.io/ppn2v_rc/resources/images/teaser.png"/>
-		<meta property="og:description" content="M. Prakash*, M. Lalit, P. Tomancak, A. Krull, F. Jug. To appear in ISBI 2020." />
+        <title>PlatyMatch</title>
+        <meta property="og:title" content="Registration of multi-modal volumetric images of embryos by establishing correspondences between cells" />
+        <meta property="og:image" content="https://juglab.github.io/platymatch/resources/images/teaser.png"/>
+		<meta property="og:description" content="M. Lalit, M. Handberg-Thorsager, Y-W Hsieh, F. Jug, P. Tomancak. To appear in BIC @ ECCV, 2020." />
   </head>
 
   <body>
     <br>
     <center>
-    <span style="font-size:42px">Fully Unsupervised Probabilistic Noise2Void</span>
+    <span style="font-size:42px">Registration of multi-modal volumetric images of embryos by establishing correspondences between cells</span>
     </center>
 
     <br><br>
@@ -129,17 +133,17 @@
        <tr>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px">Mangal Prakash<sup>*</sup></span>
+        <span style="font-size:20px">Manan Lalit</span>
         </center>
         </td>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px">Manan Lalit<sup>*</sup></span>
+        <span style="font-size:20px">Mette Handberg-Thorsager</span>
         </center>
         </td>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px">Pavel Tomancak</span>
+        <span style="font-size:20px">Yu-Wen Hsieh</span>
         </center>
         </td>
         
@@ -152,12 +156,12 @@
        <tr>
         <td align=center width=100px>
         <center>
-          <span style="font-size:20px">Alex Krull<sup>+</sup></span>
+          <span style="font-size:20px">Florian Jug </span>
         </center>
         </td>
          <td align=center width=100px>
         <center>
-          <span style="font-size:20px">Florian Jug<sup>+</sup></span>
+          <span style="font-size:20px">Pavel Tomancak </span>
         </center>
         </td>
      </tr>
@@ -181,6 +185,7 @@
     </table>
 
 <br>
+    <!--
     <table align=center width=700px>
        <tr>
         <td align=center width=100px>
@@ -195,14 +200,14 @@
         </td>
      </tr>
     </table>
-
+    -->
     
     <br>
     <table align=center width=700px>
        <tr>
         <td align=center width=100px>
         <center>
-          <span style="font-size:20px">In ISBI 2020</span>
+  	<span style="font-size:20px">In BioImage Computing @ ECCV 2020</span>
         </center>
         </td>
      </tr>
@@ -213,20 +218,25 @@
        <tr>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px"><a href="https://arxiv.org/abs/1911.12291.pdf">[pdf]</a></span>
+        <span style="font-size:20px"><a href="">[pdf]</a></span>
         </center>
         </td>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px"><a href="http://www.github.com/juglab/ppn2v/">[code]</a></span>
+        <span style="font-size:20px"><a href="">[slides]</a></span>
         </center>
         </td>
         <td align=center width=100px>
         <center>
-        <span style="font-size:20px"><a href="https://slides.com/mananlalit/ppn2v_9jan2020-e55cde/fullscreen?token=z4c4Q2dl">[slides]</a> </span>
+        <span style="font-size:20px"><a href="">[code]</a> </span>
         </center>
         </td>
-        
+        <td align=center width=100px>
+        <center>
+        <span style="font-size:20px"><a href="">[docs]</a> </span>
+        </center>
+        </td>
+
      </tr>
     </table>
     <table align=center width=700px>
@@ -244,71 +254,161 @@
                 <tr>
                     <td width=00px>
                       <center>
-                          <a href="./resources/images/teaser.png"><img src = "./resources/images/teaser.png" width="600px"></img></href></a><br>
+                          <a href="">
+				  <div class="relative">
+				  <img src = "./resources/images/Figure1_onCanvas.png" width="900px"></img>
+				  <p class="absolute-text-1"> A </p>
+				  <p class="absolute-text-2"> B </p>
+				  <p class="absolute-text-3"> C </p>
+				  </div>
+				  </href>
+			  </a><br>
                     </center>
                     </td>
                 </tr>
                     <td width=600px>
                       <center>
-                          <span style="font-size:14px"><i>Our proposed GMM bootstrapping approach does not require paired training or calibration data, but achieves superior results compared to other fully unsupervised methods.</i>
+                          <span style="font-size:14px"><i>
+					  <p align="justify">
+					  (A) 2-D schematic illustrating the idea: two distinct specimens (left: source and middle: target) are compared in order to estimate pair-wise cell nuclei correspondences and an optimal transform that registers the source onto the target (right)
+					  (B, C) 2-D schematic illustrating the two use cases: (left, B) images of distinct, independent in-situ specimens, acquired through confocal microscopy are registered to each other, which enables formation of an average, virtual atlas. (right, C) images of in-situ specimens, acquired through confocal microscopy are registered to the appropriate frame (tp: time point) in a time-lapse movie acquired through SPIM imaging. Nuclei indicated in darker shades are the ones expressing the transcription factor being investigated. These transcription factor intensities are <b>transferred</b>  from the source  nucleus to the corresponding target nucleus in both use cases. 
+					  </p>
+				  </i>
                     </center>
                     </td>
                 </tr>
             </table>
 
             <br>
-Image denoising is the first step in many biomedical image analysis pipelines and Deep Learning (DL) based methods are currently best performing.
-A new category of DL methods such as Noise2Void or Noise2Self can be used fully unsupervised, requiring nothing but the noisy data.
-However, this comes at the price of reduced reconstruction quality.
-The recently proposed Probabilistic Noise2Void (PN2V) improves results, but requires an additional noise model for which calibration data needs to be acquired.
-Here, we present improvements to PN2V that (i) replace histogram based noise models by parametric noise models, and 
-(ii) show how suitable noise models can be created even in the absence of calibration data. This is a major step since it actually renders PN2V fully unsupervised.
-We demonstrate that all proposed improvements are not only academic but indeed relevant.
-
-
+	<p align="justify">
+Early development of an animal from an egg involves a rapid increase in cell number and several cell fate specification events which are accompanied by dynamic morphogenetic changes.
+In order to correlate the morphological changes with the underlying genetic events, one typically needs to monitor the living system with several imaging modalities offering different spatial and temporal resolution.
+Live imaging allows monitoring the embryo at a high temporal resolution and observing the morphological changes during the early development. 
+Confocal images of specimens fixed and stained for the expression of certain genes provide high spatially-resolved static snapshots and enable observing the transcription states of an embryo at specific time points during development. 
+The two modalities cannot, by definition, be applied to the same specimen and thus, separately obtained images of different specimens need to be registered.
+Biologically, the most meaningful way to register the images is by identifying cellular correspondences between these two imaging modalities. 
+In this way, one can bring the two sources of information into a single domain and combine dynamic information on morphogenesis with static gene expression data. 
+The problem of establishing cellular correspondence is non-trivial due to the stochasticity of developmental processes and the non-linear deformation of the specimen during staining protocols. 
+Here, we propose a new computational pipeline for identifying cell-to-cell correspondences between images from multiple modalities and for using these correspondences to register 3D images within and across imaging modalities. 
+We demonstrate this pipeline by combining four dimensional time-lapse showing embryogenesis of Spiralian ragworm <i> Platynereis dumerilii </i> with three dimensional scans of fixed <i>Platynereis dumerilii </i> embryos stained for the expression of a variety of important developmental transcription factors.  
+We compare our approach with methods for aligning point clouds and show that we match the accuracy of these state-of-the-art registration pipelines on synthetic data. 
+We show that our approach outperforms these methods on real biological imaging datasets. 
+In addition, our approach uniquely provides, in addition to the registration, also the non-redundant matching of corresponding, biologically meaningful entities within the registered specimen which is the prerequisite for generating biological insights from the combined datasets.
+The complete pipeline is available for public use through a Fiji plugin.
+	</p>
           <br><br>
           <hr>
          <!-- <table align=center width=550px> -->
-           <table align=center width=1000px>
+           <table align=center width=900px>
 	       <center><h1>Overview</h1></center>
 	      <tr>
 	      <center>
-                   <a href='https://github.com/juglab/PPN2V'><img class="round" style="width:900" src="./resources/images/overview.png"/></a>
+                   <a href=''><img class="round" style="width:1100" src="./resources/images/Figure2_onCanvas.png"/></a>
               </center>
               </tr>
 		<tr >
                       <center>
-                          <span style="font-size:14px"><i>A visual comparison of results obtained by CARE, N2V, PN2V, and our proposed methods (bold). We distinguish three families of methods: fully supervised (CARE), unsupervised but requiring additional calibration data (PN2V, our PN2V GMM),and fully unsupervised (N2V, PN2V using our bootstrapped histogram and GMM based noise models). The leftmost column in the unsupervised + calibration category shows the average of all available calibration images used for PN2V and PN2V GMM. Note that results of our fully unsupervised methods reach very similar quality to methods requiring either clean ground truth, or additional calibration data.</i>
+		  <span style="font-size:14px" ><i>
+				  <p align="justify">	
+Figure illustrating the key elements of our pipeline: 
+(I) Normalized Laplacian of Gaussian operator is evaluated at multiple &sigma;. Here, a two dimensional slice of a volumetric image is shown.The operators which provide the strongest local response are shown for three exemplary cell nuclei 
+(II) In order to ensure that the shape context geometric descriptor is rotationally covariant, we modify the original coordinate system (shown in gray, top left) to obtain a unique coordinate system (show in black) for each nucleus detection.
+The Z-axis is defined by the vector joining the center of mass of the point cloud to the point of interest, the X-axis is defined along the projection of the first principal component of the complete point cloud evaluated orthogonal to the Z-axis. 
+The Y-axis is evaluated as a cross product of the first two vectors. 
+Since the sign of the first principal component vector is a numerical accident and thus not repeatable, we use both the possibilities and evaluate two shape context descriptors for each feature point in the source point cloud, in practice. 
+Next, the neighbourhood around each nucleus detection is binned in order to compute the shape context signature for each detection. 
+By comparing shape contexts resulting from the two clouds of cell nuclei detections and following up by RANSAC filtering to prune faulty correspondences, allows us to estimate a global 4 X 4-sized affine transform which coarsely registers the source (moving) point cloud to the target (fixed) point cloud (III) In order to obtain a tighter fit between the two clouds of cell nuclei detections, the iterative closest point algorithm is run. The procedure involves the iterative identification of the nearest neighbours (indicated by black arrows), followed by the estimation of the transform parameters (IV) At this stage, a Maximum Bipartite Matching is performed between the transformed moving cloud of cell nuclei detections and the static target cloud of cell nuclei detections, by employing the Hungarian Algorithm for optimization (V) Since the two specimens are distinct individuals, non-linear differences would persist despite the preceding, linear registration. 
+We improve the quality of the registration at this stage by employing a thin-plate spline transform and using the correspondences evaluated from the previous step as ground truth control points to estimate the parameters of the thin-plate spline transform </p>  </i>
                     </center>
                </tr>
-
+	</table>	
 	      
           <br>
                 <hr>
-  
+ 	<table align=center width=900px> 
 	       <center><h1>Results</h1></center>
-	      <tr>
-		<center>
-                   <a href='https://github.com/juglab/PPN2V'><img class="round" style="width:600" src="./resources/images/results.png"/></a>
-              </center>
+	      	<tr>
+			<td> <center> <h3> Intramodal Registration </h3></center> </td>
+			<td> <center> <h3> Intermodal Registration </h3></center> </td>
+
+		</tr>
+	       <tr>
+		      <td>     
+			<center>
+                   		<a href=''>
+					<div class="relative">
+					<img class="round" style="width:500" src="./resources/images/F2F0.gif"/></a>
+					<p class= "absolute-text-4"> A </p>
+					</div>
+
+        	        </center>
+		      </td>
+		      <td>
+	      		<center>
+                   		<a href=''>
+					<div class = "relative">
+					
+					<img class="round" style="width:500" src="./resources/images/F2L0.gif"/></a>
+					<p class = "absolute-text-4"> B </p>
+					</div>
+              		</center>
+	      	      </td>
 		</tr>	
+		
 		<tr>
+		       <td>
+                         <center>
+                               <a href=''>
+				       <div class= "relative">
+				       
+				       <img class="round" style="width:500" src="./resources/images/F2F1.gif"/></a>
+			       	       <p class = "absolute-text-4"> C
+				       </p>
+				       </div>
+
+                         </center>
+                      </td>
+                      <td>
+              		<center>
+                   	      <a href=''>
+				      <div class ="relative">
+
+				      <img class="round" style="width:500" src="./resources/images/F2L1.gif"/></a>
+			      	      <p class = "absolute-text-4">
+				      D
+				      </p>
+				      </div>
+                        </center>
+                      </td>
+                </tr>
+               
+		<tr>	
+		     <td colspan="2">	
                       <center>
-                          <span style="font-size:14px"><i>Comparision  of  the  denoising  performance  of  all tested methods. Mean PSNR and <span>&#177;</span>1 standard error over five repetitions of each experiment are shown. Names of our proposed methods are shown in bold. Bold numbers indicate the best performing method in its respective category (supervised,unsupervised + calibration, and fully unsupervised; from top to bottom, separated by dashed lines)</i>
+                          <span style="font-size:14px"><i>
+					  <p align="justify">
+					  A:  DAPI  channels  indicating  cell  nuclei  for  two  distinct in-situ specimens (source:  green  and  magenta:  target  image).  B:  DAPI  channels  indicating  cell  nuclei for  an in-situ specimen  (source:  green)  being  registered  to  the  corresponding  frame containing equivalent number of cell nuclei, in the time-lapse movie (target: magenta). Landmarks for source image are indicated as yellow spheres and labeled from 1 . . . 12. Similarly, landmarks for the target image are labeled from 1’ . . . 12’. C, D: After performing  registration  with  our  proposed  pipeline,  corresponding  landmarks  from  the source and target images appear to be much closer in Euclidean distance.
+					  </p>
+				  
+				  
+				  </i>
                     </center>
-                    </tr>
+                    </td>
+		</tr>
       
-	
+	</table>
           <br>
                 <hr>
   
-          <table align=center width=650>
+          <table align=center width=900>
              <center><h1>Paper</h1></center>
                 <tr>
-                  <td><a href="https://arxiv.org/pdf/1907.10043.pdf"><img class="layered-paper-big" style="height:180px" src="./resources/images/paper.png"/></a></td>
-                  <td><span style="font-size:14pt">Prakash<sup>*</sup>, Lalit<sup>*</sup>, Tomancak, Krull<sup>+</sup>, Jug<sup>+</sup>.<br>
-                          Fully Unsupervised Probabilistic Noise2Void.<br>
-                          In ISBI 2020.
+                  <td><a href=""><img class="layered-paper-big" style="height:180px" src="./resources/images/paper.png"/></a></td>
+		  <td><span style="font-size:14pt"><p align ="justify"> 
+			  Lalit, Handberg-Thorsager, Hsieh, Jug, Tomancak.<br>
+                          Registration of multi-modal volumetric images of embryos by establishing correspondences between cells.<br>
+                          In BioImage Computing @ ECCV 2020.
+		           </p>
                  <br>
                   <!-- [hosted on <a href="#">arXiv</a>]</a> -->
                     </td>
@@ -319,7 +419,7 @@ We demonstrate that all proposed improvements are not only academic but indeed r
           <table align=center width=180px>
               <tr>
                   <td><span style="font-size:14pt"><center>
-                      <a href="https://arxiv.org/abs/1911.12291">[pdf]</a>
+                      <a href="">[pdf]</a>
                     </center></td>
 
                   <td><span style="font-size:14pt"><center>
@@ -332,13 +432,15 @@ We demonstrate that all proposed improvements are not only academic but indeed r
                 <hr>
 
 
-            <table align=center width=1100px>
+            <table align=center width=900px>
                 <tr>
                     <td>
                       <left>
                 <center><h1>Acknowledgements</h1></center>
-The authors would like to acknowledge the Light Microscopy Facility  of  MPI-CBG,  Diana  Afonso  and  Jacqueline  Tabler from MPI-CBG for kindly sharing their samples and expertise, and Matthias Arzt from CSBD/MPI-CBG for helpful discussions  on  possible  noise  model  formulations.   This  work was supported by the German Federal Ministry of Research and Education (BMBF) under the codes 031L0102 (de.NBI)and 01IS18026C (ScaDS2), and the German Research Foundation (DFG) under the code JU3110/1-1(FiSS). This webpage template was borrowed from some <a href="https://richzhang.github.io/colorization/">colorful folks</a>.
-            </left>
+		<p align="justify">
+		The authors would like to acknowledge the Light Microscopy Facility  of  MPI-CBG,  Matthias Arzt from CSBD/MPI-CBG for helpful discussions on possible formulations for 3-D Shape Descriptor, and Tim-Oliver Buchholz and Tobias Pietzsch from MPI-CBG/CSBD for developing the BigDataViewer UI-Panel.   This  work was supported by the German Federal Ministry of Research and Education (BMBF) under the codes 031L0102 (de.NBI) and 01IS18026C (ScaDS2), and the German Research Foundation (DFG) under the code JU3110/1-1(FiSS). This webpage template was borrowed from some <a href="https://richzhang.github.io/colorization/">colorful folks</a>.
+            	</p>
+		      </left>
         </td>
         </tr>
         </table>
