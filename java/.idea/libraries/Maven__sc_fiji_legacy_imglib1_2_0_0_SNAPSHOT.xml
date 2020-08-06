@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: sc.fiji:legacy-imglib1:2.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/sc/fiji/legacy-imglib1/2.0.0-SNAPSHOT/legacy-imglib1-2.0.0-20141105.194753-20.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/sc/fiji/legacy-imglib1/2.0.0-SNAPSHOT/legacy-imglib1-2.0.0-20141105.194753-20-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/sc/fiji/legacy-imglib1/2.0.0-SNAPSHOT/legacy-imglib1-2.0.0-20141105.194753-20-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
