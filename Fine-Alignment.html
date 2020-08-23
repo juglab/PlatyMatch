@@ -85,7 +85,11 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Detecting-Nuclei.html">Detecting Nuclei</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coarse-Alignment.html">Coarse Alignment</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fine Alignment</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fine Alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#icp">ICP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining-the-complete-set-of-correspondences">Obtaining the complete Set of Correspondences</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -152,6 +156,17 @@
             
   <div class="section" id="fine-alignment">
 <h1>Fine Alignment<a class="headerlink" href="#fine-alignment" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="icp">
+<h2>ICP<a class="headerlink" href="#icp" title="Permalink to this headline">¶</a></h2>
+<p>The previous step provides us a good initial alignment. Next, we employ <cite>Iterative Closest Point</cite> which  alternates between establishing correspondences via closest-point lookups and recomputing the optimal transform based on the current set of correspondences.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/after_ICP.png"><img alt="schematic" src="_images/after_ICP.png" style="width: 100%;" /></a>
+</div>
+</div>
+<div class="section" id="obtaining-the-complete-set-of-correspondences">
+<h2>Obtaining the complete Set of Correspondences<a class="headerlink" href="#obtaining-the-complete-set-of-correspondences" title="Permalink to this headline">¶</a></h2>
+<p>We build a M * N-sized cost matrix C where  the entry Cij is the euclidean distance between the ith transformed source cell nucleus detection and the jth target cell nucleus detection. Next, we employ the Hungarian Algorithm to perform a maximum bipartite matching and estimate correspondences</p>
+</div>
 </div>
 
 

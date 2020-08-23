@@ -85,7 +85,11 @@
 <li class="toctree-l1"><a class="reference internal" href="Data.html">Volumetric Images of <em>Platynereis</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Detecting-Nuclei.html">Detecting Nuclei</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Coarse Alignment</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Coarse Alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#shape-context">Shape Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ransac">RANSAC</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Fine-Alignment.html">Fine Alignment</a></li>
 </ul>
 
@@ -153,6 +157,24 @@
             
   <div class="section" id="coarse-alignment">
 <h1>Coarse Alignment<a class="headerlink" href="#coarse-alignment" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="shape-context">
+<h2>Shape Context<a class="headerlink" href="#shape-context" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we will provide the details of our implementation of the 3D shape context  geometric descriptor, which is a signature obtained uniquely for all feature points in the source and target point clouds.
+FOr each basis point, we identify a unique coordinate system which makes the problem of matching rotationally (and partially scale) invariant.
+The support region around any basis point is discretized into bins, and a histogram is formed by counting the number of point neighbours falling within each bin. Like in Belongie et al ‘s work, in order to be more sensitive to nearby points, we use a log-polar coordinate system  In our experiments, we build a 3D histogram with 5  equally spaced log-radius bins and 6 and 12 equally spaced elevation  and azimuth  bins respectively.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/shapeContext.gif"><img alt="schematic" src="_images/shapeContext.gif" style="width: 100%;" /></a>
+</div>
+</div>
+<div class="section" id="ransac">
+<h2>RANSAC<a class="headerlink" href="#ransac" title="Permalink to this headline">¶</a></h2>
+<p>By comparing shape contexts resulting from the two clouds of cell nuclei detections, we obtain an initial temporary set of correspondences. These are filtered to obtain a set of inlier point correspondences using RANSAC Fischler1981.
+In our experiments, we specified an affine transform model, which requires a sampling of 4 pairs of corresponding points.
+We executed RANSAC for 20000 trials, used the Moore-Penrose Pseudo-Inverse operation to estimate the affine transform between the two sets of corresponding locations, and allowed an inlier cutoff of 15 pixels L2 distance between the transformed and the target nucleus locations.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/ransac.png"><img alt="schematic" src="_images/ransac.png" style="width: 100%;" /></a>
+</div>
+</div>
 </div>
 
 
