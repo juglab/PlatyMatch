@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Detecting Nuclei &mdash; PlatyMatch 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Coarse Alignment" href="Coarse-Alignment.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PlatyMatch
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Data.html">Volumetric Images of <em>Platynereis</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Detecting Nuclei</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#open-image">Open Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-minima-in-the-4d-space">Local Minima in the 4D space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edit-nuclei">Edit Nuclei</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-previous-detections">Load Previous Detections</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Coarse-Alignment.html">Coarse Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fine-Alignment.html">Fine Alignment</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PlatyMatch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Detecting Nuclei</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Detecting-Nuclei.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detecting-nuclei">
+<h1>Detecting Nuclei<a class="headerlink" href="#detecting-nuclei" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="open-image">
+<h2>Open Image<a class="headerlink" href="#open-image" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Select card <em>Open File</em></p></li>
+<li><p><em>Browse</em> for Image on your local workstation</p></li>
+<li><p><em>Open</em> the selected file</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/open_file.png"><img alt="_images/open_file.png" src="_images/open_file.png" style="width: 600px;" /></a>
+<div class="line-block">
+<div class="line">CTRL+SHIFT allows you to <em>Zoom In and Out</em></div>
+<div class="line"><em>Mouse Scroll Wheel</em> allows you to scroll through volumetric image</div>
+</div>
+</div>
+<div class="section" id="local-minima-in-the-4d-space">
+<h2>Local Minima in the 4D space<a class="headerlink" href="#local-minima-in-the-4d-space" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Select card <em>Detect Spherical Structures</em></p></li>
+<li><p>Set <em>Min Scale</em> =  5</p></li>
+<li><p>Set <em>Step Scale</em> = 1</p></li>
+<li><p>Set <em>Max Scale</em> =  9</p></li>
+<li><p>Set <em>Anisotropic Axis</em> = X for <em>in-situ</em> embryo and Z for <em>live</em> embryo</p></li>
+<li><p>Set <em>Anisotropic Sampling Factor</em> = 1 for <em>in-situ</em> embryo and 5 for <em>live</em> embryo</p></li>
+<li><p>Ensure <em>Bright Blobs</em> checkbox is ticked</p></li>
+<li><p>Press <em>Run</em></p></li>
+</ul>
+<div class="line-block">
+<div class="line"><em>Warning</em> This step above takes the most time and memory.</div>
+<div class="line">If the above process fails, increase the memory allocated to Fiji by going to <em>Edit&gt;Options&gt;Memory &amp; Threads</em> and increasing the <em>Maximum Memory</em></div>
+</div>
+<div class="line-block">
+<div class="line"><em>Trouble Shoot</em> If the above doesn’t work, try cropping out the background from the volumetric image just to process the embryo of interest</div>
+</div>
+<a class="reference internal image-reference" href="_images/detect_nuclei.png"><img alt="_images/detect_nuclei.png" src="_images/detect_nuclei.png" style="width: 600px;" /></a>
+</div>
+<div class="section" id="edit-nuclei">
+<h2>Edit Nuclei<a class="headerlink" href="#edit-nuclei" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Select card <em>Edit Detections</em></p></li>
+<li><p>Press <em>Run</em></p></li>
+<li><p>Visually inspect the results</p></li>
+<li><p>At sites of over-detection, select card <em>Select Nuclei</em></p></li>
+<li><p>Click on over-segmented detection and press <em>Delete</em></p></li>
+<li><p>At sites of under-detection, select card <em>Select Nuclei</em></p></li>
+<li><p>Drag,  form an Oval and release. Next click <em>Add</em></p></li>
+<li><p>When satisfied, press <em>Save Results</em></p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/add_nucleus.png"><img alt="_images/add_nucleus.png" src="_images/add_nucleus.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="_images/added_nucleus.png"><img alt="_images/added_nucleus.png" src="_images/added_nucleus.png" style="width: 600px;" /></a>
+</div>
+<div class="section" id="load-previous-detections">
+<h2>Load Previous Detections<a class="headerlink" href="#load-previous-detections" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Open Image by using the card <em>Open File</em></p></li>
+<li><p>Select card <em>Load Ground Truth Detections</em></p></li>
+<li><p>Browse for previously saved <em>csv</em> results file</p></li>
+<li><p>Click <em>Open</em> to load results file</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Coarse-Alignment.html" class="btn btn-neutral float-right" title="Coarse Alignment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
