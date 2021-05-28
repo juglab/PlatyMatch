@@ -27,7 +27,7 @@ This repository hosts the version of the code used for the **[publication](https
 
 We refer to the techniques elaborated in the publication, here as **PlatyMatch**. `PlatyMatch` allows registration of volumetric, microscopy images of embryos by establishing correspondences between cells. 
 
-`PlatyMatch` first performs detection of nuclei in the two images being considered, next calculates unique `shape context` features for each nucleus detection which encapsulates the neighborhood as seen by that nucleus, and finally identifies pairs of matching nuclei through bipartite matching applied to the pairwise distance matrix generated from these features. 
+`PlatyMatch` first performs detection of nuclei in the two images being considered, next calculates unique `shape context` features for each nucleus detection which encapsulates the neighborhood as seen by that nucleus, and finally identifies pairs of matching nuclei through maximum bipartite matching applied to the pairwise distance matrix generated from these features. 
 
 ### Dependencies 
 
