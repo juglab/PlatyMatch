@@ -29,7 +29,6 @@ We refer to the techniques elaborated in the publication, here as **PlatyMatch**
 
 `PlatyMatch` first performs detection of nuclei in the two images being considered, next calculates unique `shape context` features for each nucleus detection which encapsulates the neighborhood as seen by that nucleus, and finally identifies pairs of matching nuclei through bipartite matching applied to the pairwise distance matrix generated from these features. 
 
-
 ### Dependencies 
 
 You can install `PlatyMatch` via **[pip]**:
@@ -55,10 +54,10 @@ Next, select `PlatyMatch` from `Plugins> Add Dock Widget`.
 
 Datasets are available as release assets **[here](https://github.com/juglab/PlatyMatch/releases/tag/v0.0.1)**.
 These comprise of images, nuclei detections and keypoint locations for confocal images of 12 individual specimens under the `01-insitus` directory and static snapshots of a live embryo imaged through Light Sheet Microscopy under the `02-live` directory. 
-Folders with the same name in these two directories correspond in their developmental age and should be matched, for example, `01-insitus/02` corresponds to `02-live/02`, `01-insitus/03` corresponds to `02-live/03` and so on.   
+Folders with the same name in these two directories correspond in their developmental age, for example, `01-insitus/02` corresponds to `02-live/02`, `01-insitus/03` corresponds to `02-live/03` and so on.   
 
 
-### Regsistering your data
+### Registering your data
 
 - **Detect Nuclei** 
 	- Drag and drop your images in the viewer 
