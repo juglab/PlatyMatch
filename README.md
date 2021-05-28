@@ -1,9 +1,9 @@
 [![DOI:10.1007/978-3-030-66415-2_30](https://zenodo.org/badge/DOI/10.1007/978-3-030-66415-2_30.svg)](https://link.springer.com/chapter/10.1007/978-3-030-66415-2_30)
-[![License](https://img.shields.io/pypi/l/PlatyMatch.svg?color=green)](https://github.com/mlbyml/PlatyMatch/raw/master/LICENSE)
+[![License](https://img.shields.io/pypi/l/PlatyMatch.svg?color=green)](https://github.com/juglab/PlatyMatch/raw/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/PlatyMatch.svg?color=green)](https://pypi.org/project/PlatyMatch)
 [![Python Version](https://img.shields.io/pypi/pyversions/PlatyMatch.svg?color=green)](https://python.org)
-[![tests](https://github.com/mlbyml/PlatyMatch/workflows/tests/badge.svg)](https://github.com/mlbyml/PlatyMatch/actions)
-[![codecov](https://codecov.io/gh/mlbyml/PlatyMatch/branch/master/graph/badge.svg)](https://codecov.io/gh/mlbyml/PlatyMatch)
+[![tests](https://github.com/juglab/PlatyMatch/workflows/tests/badge.svg)](https://github.com/juglab/PlatyMatch/actions)
+[![codecov](https://codecov.io/gh/juglab/PlatyMatch/branch/master/graph/badge.svg)](https://codecov.io/gh/juglab/PlatyMatch)
 
 
 <p align="center">
@@ -133,7 +133,7 @@ isbn="978-3-030-66415-2"
 [Apache Software License 2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [Mozilla Public License 2.0]: https://www.mozilla.org/media/MPL/2.0/index.txt
 [cookiecutter-napari-plugin]: https://github.com/napari/cookiecutter-napari-plugin
-[file an issue]: https://github.com/mlbyml/PlatyMatch/issues
+[file an issue]: https://github.com/juglab/PlatyMatch/issues
 [napari]: https://github.com/napari/napari
 [tox]: https://tox.readthedocs.io/en/latest/
 [pip]: https://pypi.org/project/pip/
