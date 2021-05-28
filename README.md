@@ -77,17 +77,17 @@ Folders with the same name in these two directories correspond in their developm
 	- Load the detections for the `Fixed Image`
 	- If these two images correspond to the same imaging modality, then select the `Unsupervised` option under `Estimate Transform` checkbox (this corresponds to Intramodal Registration in the publication)
 	- If these two images correspond to different imaging modalities, then select the `Supervised` option under `Estimate Transform` checkbox (this corresponds to Intermodal Registration in the publication)
-	- For the Intramodal use case, click on `Run` pushbutton. Once the calculation is complete, a confirmation message shows up in the terminal. Export the transform matrix to a csv.
-	- For the Intermodal use case, upload the locations of a few matching keypoints in both images. These locations serve to provide a good starting point for the transform calculation. Once the keypoint files have been uploaded for both the images, then click `Run` and then export the transform matrix to a csv.  
+	- For the Intramodal use case, click on `Run` pushbutton. Once the calculation is complete, a confirmation message shows up in the terminal. Export the transform matrix to a csv
+	- For the Intermodal use case, upload the locations of a few matching keypoints in both images. These locations serve to provide a good starting point for the transform calculation. Once the keypoint files have been uploaded for both the images, then click `Run` and then export the transform matrix to a csv file 
 - **Evaluate Metrics**
 	- Drag images which need to be transformed, in the viewer
 	- Click on `Sync with Viewer` button to refresh the drop-down menus
 	- Specify the anisotropy factor (`Moving Image Anisotropy (Z)` and `Fixed Image Anisotropy (Z)`) (i.e. the ratio of the size of the z pixel with respect to the x or y pixel. This factor is typically more than 1.0 because the z dimension is often undersampled)
 	- Load the transform which was calculated in the previous steps
 	- If you simply wish to export a transformed version of the moving image, click on `Export Transformed Image`
-	- Additionallly, one could quantify metrics such as average registration error evaluated on a few keypoints. To do so, tick the `csv` checkbox, if keypoints and detections are available as a csv file. Then load the keypoints for the moving image (`Moving Kepoints`) and the fixed image (`Fixed Keypoints`).
+	- Additionallly, one could quantify metrics such as average registration error evaluated on a few keypoints. To do so, tick the `csv` checkbox, if keypoints and detections are available as a csv file. Then load the keypoints for the moving image (`Moving Kepoints`) and the fixed image (`Fixed Keypoints`)
 	- Also, upload the detections calculated in the previous steps (`Detect Nuclei`)  by uploading the `Moving Detections` and the `Fixed Detections`
-	- Click on the `Run` push button. 
+	- Click on the `Run` push button
 	- The text fields such as `Matching Accuracy`(0 to 1, with 1 being the best) and `Average Registration Error` (the lower the better) should become populated once the results are available
 
 ### Contributing
