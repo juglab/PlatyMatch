@@ -56,5 +56,5 @@ setup(
 #        'napari.plugin': [
 #            'PlatyMatch = platymatch',
 #        ],
-    },
+#    },
 )
