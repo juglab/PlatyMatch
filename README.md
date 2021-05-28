@@ -53,7 +53,7 @@ Next, select `PlatyMatch` from `Plugins> Add Dock Widget`.
 
 ### Datasets
 
-Datasets are available as release assets **[here](https://github.com/juglab/PlatyMatch/releases/tag/v0.0.2)**.
+Datasets are available as release assets **[here](https://github.com/juglab/PlatyMatch/releases/tag/v0.0.1)**.
 These comprise of images, nuclei detections and keypoint locations for confocal images of 12 individual specimens under the `01-insitus` directory and static snapshots of a live embryo imaged through Light Sheet Microscopy under the `02-live` directory. 
 Folders with the same name in these two directories correspond in their developmental age and should be matched, for example, `01-insitus/02` corresponds to `02-live/02`, `01-insitus/03` corresponds to `02-live/03` and so on.   
 
