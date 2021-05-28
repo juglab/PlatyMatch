@@ -1,5 +1,5 @@
 [![DOI:10.1007/978-3-030-66415-2_30](https://zenodo.org/badge/DOI/10.1007/978-3-030-66415-2_30.svg)](https://link.springer.com/chapter/10.1007/978-3-030-66415-2_30)
-[![License](https://img.shields.io/pypi/l/PlatyMatch.svg?color=green)](https://github.com/juglab/PlatyMatch/raw/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://img.shields.io/pypi/v/PlatyMatch.svg?color=green)](https://pypi.org/project/PlatyMatch)
 [![Python Version](https://img.shields.io/pypi/pyversions/PlatyMatch.svg?color=green)](https://python.org)
 [![tests](https://github.com/juglab/PlatyMatch/workflows/tests/badge.svg)](https://github.com/juglab/PlatyMatch/actions)
@@ -62,7 +62,7 @@ Folders with the same name in these two directories correspond in their developm
 - **Detect Nuclei** 
 	- Drag and drop your images in the viewer 
 	- Click on `Sync with Viewer` button to refresh the drop-down menus 
-	- Select the appropraite image in the drop down menu (for which nuclei detections are desired)
+	- Select the appropriate image in the drop down menu (for which nuclei detections are desired)
 	- Select **`Detect Nuclei`** from the drop-down menu
 	- Specify the anisotropy factor (`Anisotropy (Z)`) (i.e. the ratio of the size of the z pixel with respect to the x or y pixel. This factor is typically more than 1.0 because the z dimension is often undersampled)
 	- Click `Run Scale Space Log` button
