@@ -17,7 +17,7 @@
 - **[Dependencies](#dependencies)**
 - **[Getting Started](#getting-started)**
 - **[Datasets](#datasets)**
-- **[Matching your data](#matching-your-data)**
+- **[Registering your data](#registering-your-data)**
 - **[Contributing](#contributing)**
 - **[Issues](#issues)**
 - **[Citation](#citation)**
@@ -58,7 +58,7 @@ These comprise of images, nuclei detections and keypoint locations for confocal 
 Folders with the same name in these two directories correspond in their developmental age and should be matched, for example, `01-insitus/02` corresponds to `02-live/02`, `01-insitus/03` corresponds to `02-live/03` and so on.   
 
 
-### Matching your data
+### Regsistering your data
 
 - **Detect Nuclei** 
 	- Drag and drop your images in the viewer 
