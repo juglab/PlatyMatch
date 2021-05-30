@@ -407,7 +407,7 @@ class EstimateTransform(QWidget):
         fixed_detections_copy = self.fixed_detections.copy()
         if (self.estimate_transform_combo_box.currentIndex() == 0):  # unsupervised
 
-            print("=" * 20)
+            print("=" * 25)
             print("Generating Unaries")
 
             unary_11, unary_12 = get_unary(moving_centroid, mean_distance=moving_mean_distance,
