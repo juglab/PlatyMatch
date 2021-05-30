@@ -101,6 +101,7 @@ class DetectNuclei(QWidget):
         
     def _export_detections(self):
         save_file_name = QFileDialog.getSaveFileName(self, 'Save File')  # this returns a tuple!
+        print("=" * 25)
         print("Saving Detections at {}".format(save_file_name[0]))
         for layer in self.viewer.layers:
             if layer.name == 'points-' + self.viewer.layers[self.images_combo_box.currentIndex()].name:
@@ -123,6 +124,7 @@ class DetectNuclei(QWidget):
 
     def _export_instance_mask(self):
         save_file_name = QFileDialog.getSaveFileName(self, 'Save File')  # this returns a tuple!
+        print("=" * 25)
         print("Saving Detections at {}".format(save_file_name[0]))
         for layer in self.viewer.layers:
             if layer.name == 'points-' + self.viewer.layers[self.images_combo_box.currentIndex()].name:
@@ -328,7 +330,7 @@ class EstimateTransform(QWidget):
     def _save_transform(self):
         transform_matrix_combined = np.matmul(self.transform_matrix_icp, self.transform_matrix_sc)
         save_file_name = QFileDialog.getSaveFileName(self, 'Save Transform Matrix')  # this returns a tuple!
-        print("=" * 20)
+        print("=" * 25)
         print("Saving Transform Matrix at {}".format(save_file_name[0]))
         np.savetxt(save_file_name[0], transform_matrix_combined, delimiter=' ', fmt='%1.3f')
 
@@ -375,7 +377,7 @@ class EstimateTransform(QWidget):
             moving_ids = moving_ids[moving_ids != 0]
             fixed_ids = np.unique(self.viewer.layers[self.fixed_image_combobox.currentIndex()].data)
             fixed_ids = fixed_ids[fixed_ids != 0]
-            print("=" * 20)
+            print("=" * 25)
             print("Obtaining moving image centroids")
             for i, id in enumerate(tqdm(moving_ids)):
                 self.moving_progress_bar.setValue(i / len(moving_ids) * 100)
@@ -384,7 +386,7 @@ class EstimateTransform(QWidget):
                 temp_1.append([zmean, ymean, xmean])
                 moving_nucleus_size.append(float(self.moving_image_anisotropy_line.text()) * len(z))
 
-            print("=" * 20)
+            print("=" * 25)
             print("Obtaining fixed image centroids")
             for j, id in enumerate(tqdm(fixed_ids)):
                 self.fixed_progress_bar.setValue(j / len(fixed_ids) * 100)
@@ -434,7 +436,7 @@ class EstimateTransform(QWidget):
                 ransac_error = 0.5 * (np.average(moving_nucleus_size) ** (1 / 3) + np.average(fixed_nucleus_size) ** (
                             1 / 3))  # approx average nucleus radius
 
-            print("=" * 20)
+            print("=" * 25)
             print("Beginning RANSAC")
             transform_matrix_1, inliers_best_1 = do_ransac(moving_detections_copy[:, row_indices_1],  # 4 x N
                                                            fixed_detections_copy[:, col_indices_1],  # 4 x N
@@ -449,13 +451,13 @@ class EstimateTransform(QWidget):
                                                            trials=int(self.ransac_iterations_lineedit.text()),
                                                            error=ransac_error,
                                                            transform=self.transform_combobox.currentText())
-            print("=" * 20)
+            print("=" * 25)
             print("RANSAC # Inliers 1 = {} and # Inliers 2 = {}".format(inliers_best_1, inliers_best_2))
             if (inliers_best_1 > inliers_best_2):
                 self.transform_matrix_sc = transform_matrix_1
             else:
                 self.transform_matrix_sc = transform_matrix_2
-            print("=" * 20)
+            print("=" * 25)
             print("4 x 4 Transform matrix estimated from Shape Context Approach is \n", self.transform_matrix_sc)
         elif (self.estimate_transform_combo_box.currentIndex() == 1):  # supervised
             if self.transform_combobox.currentIndex() == 0:  # affine
@@ -463,13 +465,13 @@ class EstimateTransform(QWidget):
             elif self.transform_combobox.currentIndex() == 1:  # similar
                 self.transform_matrix_sc = get_similar_transform(self.moving_keypoints, self.fixed_keypoints)
 
-        print("=" * 20)
+        print("=" * 25)
         transformed_moving_detections = apply_affine_transform(moving_detections_copy, self.transform_matrix_sc)
         self.transform_matrix_icp = perform_icp(transformed_moving_detections, fixed_detections_copy,
                                                 int(self.icp_iterations_lineedit.text()),
                                                 self.transform_combobox.currentText())
         print("4 x 4 Finetuning Transform matrix estimated from ICP Approach is \n", self.transform_matrix_icp)
-        print("=" * 20)
+        print("=" * 25)
         print("Estimate Transform Matrix is ready to export. Please click on {} push button \n".format(
             "Export Transform"))
 
@@ -706,7 +708,7 @@ class EvaluateMetrics(QWidget):
         for key in moving_dictionary.keys():
             if col_ids[np.where(row_ids == moving_dictionary[key])] == fixed_dictionary[key]:
                 hits += 1
-        print("=" * 20)
+        print("=" * 25)
 
         self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys())))
         print("Matching Accuracy is equal to {}".format(self.matching_accuracy_linedit.text()))
@@ -717,7 +719,7 @@ class EvaluateMetrics(QWidget):
         for i in range(transformed_moving_keypoints.shape[1]):
             distance += np.linalg.norm(
                 [transformed_moving_keypoints.transpose()[i, :] - self.fixed_keypoints.transpose()[i, :]])
-        print("=" * 20)
+        print("=" * 25)
         self.avg_registration_error_lineedit.setText("{:.3f}".format(distance / len(moving_dictionary.keys())))
         print("Average Registration Error is equal to {}".format(self.avg_registration_error_lineedit.text()))
 
@@ -736,6 +738,7 @@ class EvaluateMetrics(QWidget):
 
     def _export_transformed_image(self):
         save_file_name = QFileDialog.getSaveFileName(self, 'Save Transformed Image')  # this returns a tuple!
+        print("=" * 25)
         print("Saving Transformed Image at {}".format(save_file_name[0]))
         affine = sitk.AffineTransform(3)
         transform_xyz = np.zeros_like(self.transform_matrix_combined)  # 4 x 4
@@ -761,6 +764,7 @@ class EvaluateMetrics(QWidget):
         default_value = 0.0
         transformed_image = sitk.GetArrayFromImage(
             sitk.Resample(moving_image, reference_image, affine, interpolator, default_value))
+        print("=" * 25)
         print("Transformed image has shape {}".format(transformed_image.shape))
         tifffile.imsave(save_file_name[0], transformed_image)
 
