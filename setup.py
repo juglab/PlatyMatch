@@ -52,9 +52,9 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: BSD License',
     ],
-#    entry_points={
-#        'napari.plugin': [
-#            'PlatyMatch = platymatch',
-#        ],
-#    },
+    entry_points={
+        'napari.plugin': [
+            'PlatyMatch = platymatch',
+        ],
+    },
 )

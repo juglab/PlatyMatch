@@ -6,3 +6,4 @@ tqdm
 simpleitk
 napari[all]
 pandas
+pytest
