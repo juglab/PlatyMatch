@@ -26,12 +26,12 @@ with open('requirements.txt') as f:
 
 setup(
     name='PlatyMatch',
-    version='0.0.2a',
+    version='0.0.3',
     author='Manan Lalit',
     author_email='lalit@mpi-cbg.de',
     license='BSD-3',
     url='https://github.com/juglab/PlatyMatch',
-    description='`PlatyMatch` allows registration of volumetric images of embryos by establishing correspondences between cells',
+    description='PlatyMatch allows registration of volumetric images of embryos by establishing correspondences between cells',
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     packages=find_packages(),
