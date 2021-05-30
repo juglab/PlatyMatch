@@ -34,7 +34,7 @@ We refer to the techniques elaborated in the publication, here as **PlatyMatch**
 You can install `PlatyMatch` via **[pip]**:
 
 ```
-conda create -y -n PlatyMatchEnv python=3.8
+conda create -y -n PlatyMatchEnv python==3.8
 conda activate PlatyMatchEnv
 python3 -m pip install PlatyMatch
 ```
