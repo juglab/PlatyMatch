@@ -36,8 +36,7 @@ You can install `PlatyMatch` via **[pip]**:
 ```
 conda create -y -n PlatyMatchEnv python=3.8
 conda activate PlatyMatchEnv
-#python3 -m pip install PlatyMatch
-pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple platymatch
+python3 -m pip install PlatyMatch
 ```
 
 ### Getting Started
