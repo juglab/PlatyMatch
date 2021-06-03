@@ -69,6 +69,13 @@ Folders with the same name in these two directories correspond in their developm
 	- Wait until a confirmation message suggesting that nuclei detection is over shows up on the terminal
 	- Export the nuclei locations (`Export detections to csv`) to a csv file
 	- Repeat this step for all images which need to be matched
+
+
+
+
+https://user-images.githubusercontent.com/34229641/120660618-cd5d3980-c487-11eb-8996-326264a4df87.mp4
+
+
 - **Estimate Transform**
 	- In case, nuclei were exported to a csv in the `Detect Nuclei` panel, tick `csv` checkbox
 	- If the nuclei detected were specified in the order id, z, y and x in the csv file, then tick `IZYXR` checkbox
@@ -85,7 +92,7 @@ Folders with the same name in these two directories correspond in their developm
 	- Specify the anisotropy factor (`Moving Image Anisotropy (Z)` and `Fixed Image Anisotropy (Z)`) (i.e. the ratio of the size of the z pixel with respect to the x or y pixel. This factor is typically more than 1.0 because the z dimension is often undersampled)
 	- Load the transform which was calculated in the previous steps
 	- If you simply wish to export a transformed version of the moving image, click on `Export Transformed Image`
-	- Additionallly, one could quantify metrics such as average registration error evaluated on a few keypoints. To do so, tick the `csv` checkbox, if keypoints and detections are available as a csv file. Then load the keypoints for the moving image (`Moving Kepoints`) and the fixed image (`Fixed Keypoints`)
+	- Additionally, one could quantify metrics such as average registration error evaluated on a few keypoints. To do so, tick the `csv` checkbox, if keypoints and detections are available as a csv file. Then load the keypoints for the moving image (`Moving Kepoints`) and the fixed image (`Fixed Keypoints`)
 	- Also, upload the detections calculated in the previous steps (`Detect Nuclei`)  by uploading the `Moving Detections` and the `Fixed Detections`
 	- Click on the `Run` push button
 	- The text fields such as `Matching Accuracy`(0 to 1, with 1 being the best) and `Average Registration Error` (the lower the better) should become populated once the results are available
