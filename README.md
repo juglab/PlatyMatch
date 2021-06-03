@@ -86,6 +86,12 @@ https://user-images.githubusercontent.com/34229641/120660618-cd5d3980-c487-11eb-
 	- If these two images correspond to different imaging modalities, then select the `Supervised` option under `Estimate Transform` checkbox (this corresponds to Intermodal Registration in the publication)
 	- For the Intramodal use case, click on `Run` pushbutton. Once the calculation is complete, a confirmation message shows up in the terminal. Export the transform matrix to a csv
 	- For the Intermodal use case, upload the locations of a few matching keypoints in both images. These locations serve to provide a good starting point for the transform calculation. Once the keypoint files have been uploaded for both the images, then click `Run` and then export the transform matrix to a csv file 
+
+
+https://user-images.githubusercontent.com/34229641/120685628-53857a00-c4a0-11eb-8f92-7ffac730e28a.mp4
+
+
+
 - **Evaluate Metrics**
 	- Drag images which need to be transformed, in the viewer
 	- Click on `Sync with Viewer` button to refresh the drop-down menus
@@ -96,6 +102,11 @@ https://user-images.githubusercontent.com/34229641/120660618-cd5d3980-c487-11eb-
 	- Also, upload the detections calculated in the previous steps (`Detect Nuclei`)  by uploading the `Moving Detections` and the `Fixed Detections`
 	- Click on the `Run` push button
 	- The text fields such as `Matching Accuracy`(0 to 1, with 1 being the best) and `Average Registration Error` (the lower the better) should become populated once the results are available
+
+
+
+https://user-images.githubusercontent.com/34229641/120685654-5b451e80-c4a0-11eb-8d7d-de58b8b8304d.mp4
+
 
 ### Contributing
 
