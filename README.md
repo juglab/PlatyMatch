@@ -25,9 +25,9 @@
 ### Introduction
 This repository hosts the version of the code used for the **[publication](https://link.springer.com/chapter/10.1007/978-3-030-66415-2_30)** **Registration of Multi-modal Volumetric Images by Establishing Cell Correspondence**. 
 
-We refer to the techniques elaborated in the publication, here as **PlatyMatch**. `PlatyMatch` allows registration of volumetric, microscopy images of embryos by establishing correspondences between cells. 
+We refer to the techniques elaborated in the publication, here as **PlatyMatch**. `PlatyMatch` performs a linear registration of volumetric, microscopy images of embryos by establishing correspondences between cells. 
 
-`PlatyMatch` first performs detection of nuclei in the two images being considered, next calculates unique `shape context` features for each nucleus detection which encapsulates the neighborhood as seen by that nucleus, and finally identifies pairs of matching nuclei through maximum bipartite matching applied to the pairwise distance matrix generated from these features. 
+`PlatyMatch` first detects nuclei in the two images being considered, next calculates unique `shape context` features for each nucleus detection which encapsulates the neighborhood as seen by that nucleus, and finally identifies pairs of matching nuclei through maximum bipartite matching applied to the pairwise distance matrix generated from these features. 
 
 ### Dependencies 
 
