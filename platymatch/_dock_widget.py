@@ -410,26 +410,83 @@ class EstimateTransform(QWidget):
             print("=" * 25)
             print("Generating Unaries")
 
-            unary_11, unary_12 = get_unary(moving_centroid, mean_distance=moving_mean_distance,
-                                           detections=self.moving_detections, transposed=False)  # (N, 360)
-            unary_21, unary_22 = get_unary(fixed_centroid, mean_distance=fixed_mean_distance,
-                                           detections=self.fixed_detections, transposed=False)
-            U1 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
-            U2 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            unary_11, unary_12, _, _ = get_unary(moving_centroid, mean_distance=moving_mean_distance,
+                                           detections=self.moving_detections, type='moving', transposed=False)  # (N, 360)
+            unary_21, unary_22, unary_23, unary_24 = get_unary(fixed_centroid, mean_distance=fixed_mean_distance,
+                                           detections=self.fixed_detections, type='fixed', transposed=False)
 
-            for i in range(U1.shape[0]):
-                for j in range(U1.shape[1]):
+
+
+            U11 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U12 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U13 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U14 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U21 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U22 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U23 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+            U24 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
+
+
+            for i in range(U11.shape[0]):
+                for j in range(U11.shape[1]):
                     unary_i = unary_11[i]
                     unary_j = unary_21[j]
-                    U1[i, j] = get_unary_distance(unary_i, unary_j)
+                    U11[i, j] = get_unary_distance(unary_i, unary_j)
 
-            for i in range(U2.shape[0]):
-                for j in range(U2.shape[1]):
+            for i in range(U12.shape[0]):
+                for j in range(U12.shape[1]):
                     unary_i = unary_11[i]
                     unary_j = unary_22[j]
-                    U2[i, j] = get_unary_distance(unary_i, unary_j)
+                    U12[i, j] = get_unary_distance(unary_i, unary_j)
 
-            row_indices_1, col_indices_1 = linear_sum_assignment(U1)
+
+            for i in range(U13.shape[0]):
+                for j in range(U13.shape[1]):
+                    unary_i = unary_11[i]
+                    unary_j = unary_23[j]
+                    U13[i, j] = get_unary_distance(unary_i, unary_j)
+
+            for i in range(U14.shape[0]):
+                for j in range(U14.shape[1]):
+                    unary_i = unary_11[i]
+                    unary_j = unary_24[j]
+                    U14[i, j] = get_unary_distance(unary_i, unary_j)
+
+            for i in range(U21.shape[0]):
+                for j in range(U21.shape[1]):
+                    unary_i = unary_12[i]
+                    unary_j = unary_21[j]
+                    U21[i, j] = get_unary_distance(unary_i, unary_j)
+
+            for i in range(U22.shape[0]):
+                for j in range(U22.shape[1]):
+                    unary_i = unary_12[i]
+                    unary_j = unary_22[j]
+                    U22[i, j] = get_unary_distance(unary_i, unary_j)
+
+
+            for i in range(U23.shape[0]):
+                for j in range(U23.shape[1]):
+                    unary_i = unary_12[i]
+                    unary_j = unary_23[j]
+                    U23[i, j] = get_unary_distance(unary_i, unary_j)
+
+            for i in range(U24.shape[0]):
+                for j in range(U24.shape[1]):
+                    unary_i = unary_12[i]
+                    unary_j = unary_24[j]
+                    U24[i, j] = get_unary_distance(unary_i, unary_j)
+
+            row_indices_11, col_indices_11 = linear_sum_assignment(U11)
+            row_indices_12, col_indices_12 = linear_sum_assignment(U12)
+            row_indices_13, col_indices_13 = linear_sum_assignment(U13)
+            row_indices_14, col_indices_14 = linear_sum_assignment(U14)
+            row_indices_21, col_indices_21 = linear_sum_assignment(U21)
+            row_indices_22, col_indices_22 = linear_sum_assignment(U22)
+            row_indices_23, col_indices_23 = linear_sum_assignment(U23)
+            row_indices_24, col_indices_24 = linear_sum_assignment(U24)
+
+
             if (len(moving_nucleus_size) == 0 or len(fixed_nucleus_size) == 0):
                 ransac_error = 16  # approx average nucleus radius
             else:
@@ -438,25 +495,91 @@ class EstimateTransform(QWidget):
 
             print("=" * 25)
             print("Beginning RANSAC")
-            transform_matrix_1, inliers_best_1 = do_ransac(moving_detections_copy[:, row_indices_1],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_1],  # 4 x N
+            transform_matrix_11, inliers_best_11 = do_ransac(moving_detections_copy[:, row_indices_11],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_11],  # 4 x N
                                                            min_samples=int(self.ransac_samples_lineedit.text()),
                                                            trials=int(self.ransac_iterations_lineedit.text()),
                                                            error=ransac_error,
                                                            transform=self.transform_combobox.currentText())
-            row_indices_2, col_indices_2 = linear_sum_assignment(U2)
-            transform_matrix_2, inliers_best_2 = do_ransac(moving_detections_copy[:, row_indices_2],
-                                                           fixed_detections_copy[:, col_indices_2],
+            transform_matrix_12, inliers_best_12 = do_ransac(moving_detections_copy[:, row_indices_12],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_12],  # 4 x N
                                                            min_samples=int(self.ransac_samples_lineedit.text()),
                                                            trials=int(self.ransac_iterations_lineedit.text()),
                                                            error=ransac_error,
                                                            transform=self.transform_combobox.currentText())
+
+            transform_matrix_13, inliers_best_13 = do_ransac(moving_detections_copy[:, row_indices_13],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_13],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+
+            transform_matrix_14, inliers_best_14 = do_ransac(moving_detections_copy[:, row_indices_14],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_14],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+            transform_matrix_21, inliers_best_21 = do_ransac(moving_detections_copy[:, row_indices_21],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_21],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+
+            transform_matrix_22, inliers_best_22 = do_ransac(moving_detections_copy[:, row_indices_22],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_22],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+
+            transform_matrix_23, inliers_best_23 = do_ransac(moving_detections_copy[:, row_indices_23],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_23],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+
+            transform_matrix_24, inliers_best_24 = do_ransac(moving_detections_copy[:, row_indices_24],  # 4 x N
+                                                           fixed_detections_copy[:, col_indices_24],  # 4 x N
+                                                           min_samples=int(self.ransac_samples_lineedit.text()),
+                                                           trials=int(self.ransac_iterations_lineedit.text()),
+                                                           error=ransac_error,
+                                                           transform=self.transform_combobox.currentText())
+
+
             print("=" * 25)
-            print("RANSAC # Inliers 1 = {} and # Inliers 2 = {}".format(inliers_best_1, inliers_best_2))
-            if (inliers_best_1 > inliers_best_2):
-                self.transform_matrix_sc = transform_matrix_1
-            else:
-                self.transform_matrix_sc = transform_matrix_2
+            print("RANSAC # Inliers 11 = {} and # Inliers 12 = {} and # Inliers 13 = {} and # Inliers 14 = {} "
+                  "and # Inliers 21 = {} and # Inliers 22 = {} and # Inliers 23 = {} and # Inliers 24 = {}".format(inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21,
+                                                                                                                   inliers_best_22, inliers_best_23, inliers_best_24))
+
+            inliers = np.array([inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21, inliers_best_22, inliers_best_23, inliers_best_24])
+
+            if np.argmax(inliers) ==0:
+                self.transform_matrix_sc = transform_matrix_11
+            elif np.argmax(inliers) ==1:
+                self.transform_matrix_sc = transform_matrix_12
+            elif np.argmax(inliers) ==2:
+                self.transform_matrix_sc = transform_matrix_13
+            elif np.argmax(inliers) ==3:
+                self.transform_matrix_sc = transform_matrix_14
+            elif np.argmax(inliers) ==4:
+                self.transform_matrix_sc = transform_matrix_21
+            elif np.argmax(inliers) ==5:
+                self.transform_matrix_sc = transform_matrix_22
+            elif np.argmax(inliers) ==6:
+                self.transform_matrix_sc = transform_matrix_23
+            elif np.argmax(inliers) ==7:
+                self.transform_matrix_sc = transform_matrix_24
+
+
             print("=" * 25)
             print("4 x 4 Transform matrix estimated from Shape Context Approach is \n", self.transform_matrix_sc)
         elif (self.estimate_transform_combo_box.currentIndex() == 1):  # supervised
@@ -655,9 +778,9 @@ class EvaluateMetrics(QWidget):
         elif self.sender() == self.fixed_detections_pushbutton:
             self.fixed_detections, self.fixed_ids = _browse_detections(self)
         elif self.sender() == self.moving_keypoints_pushbutton:
-            self.moving_keypoints, _ = _browse_detections(self)
+            self.moving_keypoints, self.moving_keypoint_ids = _browse_detections(self)
         elif self.sender() == self.fixed_keypoints_pushbutton:
-            self.fixed_keypoints, _ = _browse_detections(self)
+            self.fixed_keypoints, self.fixed_keypoint_ids = _browse_detections(self)
 
     def _load_transform(self):
         if self.sender() == self.transform_pushbutton:
@@ -671,14 +794,13 @@ class EvaluateMetrics(QWidget):
         moving_row_indices, moving_col_indices = linear_sum_assignment(moving_kp_detection_cost_matrix)
         moving_dictionary = {}
         for index in moving_row_indices:  # 0 ... 11
-            moving_dictionary[index + 1] = self.moving_ids[
-                moving_col_indices[index]]  # 1...12 are keys ---> corresponding actual ids of moving detections
+            moving_dictionary[self.moving_keypoint_ids[index]] = self.moving_ids[moving_col_indices[index]]  # 1...12 are keys ---> corresponding actual ids of moving detections
 
         fixed_kp_detection_cost_matrix = cdist(self.fixed_keypoints.transpose(), self.fixed_detections.transpose())
         fixed_row_indices, fixed_col_indices = linear_sum_assignment(fixed_kp_detection_cost_matrix)
         fixed_dictionary = {}
         for index in fixed_row_indices:
-            fixed_dictionary[index + 1] = self.fixed_ids[fixed_col_indices[index]]
+            fixed_dictionary[self.fixed_keypoint_ids[index]] = self.fixed_ids[fixed_col_indices[index]]
 
         # next apply affine transform onto moving detections
         transformed_moving_detections = apply_affine_transform(self.moving_detections, self.transform_matrix_1)  # 3 x N
@@ -717,8 +839,8 @@ class EvaluateMetrics(QWidget):
         transformed_moving_keypoints = apply_affine_transform(self.moving_keypoints, self.transform_matrix_combined)
         distance = 0
         for i in range(transformed_moving_keypoints.shape[1]):
-            distance += np.linalg.norm(
-                [transformed_moving_keypoints.transpose()[i, :] - self.fixed_keypoints.transpose()[i, :]])
+            distance += np.linalg.norm([self.fixed_keypoints.transpose()[np.where(self.fixed_keypoint_ids == self.moving_keypoint_ids[i]), :] - transformed_moving_keypoints.transpose()[i, :]])
+
         print("=" * 25)
         self.avg_registration_error_lineedit.setText("{:.3f}".format(distance / len(moving_dictionary.keys())))
         print("Average Registration Error is equal to {}".format(self.avg_registration_error_lineedit.text()))
