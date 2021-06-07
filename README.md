@@ -65,8 +65,8 @@ Folders with the same name in these two directories correspond in their developm
 	- Select the appropriate image in the drop down menu (for which nuclei detections are desired)
 	- Select **`Detect Nuclei`** from the drop-down menu
 	- Specify the anisotropy factor (`Anisotropy (Z)`) (i.e. the ratio of the size of the z pixel with respect to the x or y pixel. This factor is typically more than 1.0 because the z dimension is often undersampled)
-	- Ideally min scales and max scales should be estimated from your data (`min_scale` should be set as `min_radius/sqrt(3)` and `max_scale` should be set as `max_radius/sqrt(3)`. The default values of `min_scale=5` and `max_scale=9` generally works well). Please note that this step takes a few minutes. 
-	- Click `Run Scale Space Log` button
+	- Ideally min scales and max scales should be estimated from your data (`min_scale` should be set as `min_radius/sqrt(3)` and `max_scale` should be set as `max_radius/sqrt(3)`. The default values of `min_scale=5` and `max_scale=9` generally works well).  
+	- Click `Run Scale Space Log` button. Please note that this step takes a few minutes.
 	- Wait until a confirmation message suggesting that nuclei detection is over shows up on the terminal
 	- Export the nuclei locations (`Export detections to csv`) to a csv file
 	- Repeat this step for all images which need to be matched
