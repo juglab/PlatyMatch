@@ -141,7 +141,7 @@ def do_ransac(moving_all, fixed_all, min_samples=4, trials=500, error=5, transfo
 
 
 
-def get_unary(centroid, mean_distance, detections, transposed = False):
+def get_unary(centroid, mean_distance, detections, type, transposed = False,):
     """
     :param centroid: N x 3 or 3 x N (transposed = False)
     :param mean_distance:
@@ -157,6 +157,8 @@ def get_unary(centroid, mean_distance, detections, transposed = False):
         detections = detections[:, :3] # N x 3
     sc = []
     sc2 = []
+    sc3=[]
+    sc4=[]
     pca = PCA(n_components=3)
     pca.fit(detections)
     V = pca.components_
@@ -171,8 +173,16 @@ def get_unary(centroid, mean_distance, detections, transposed = False):
         x_vector2 = x_vector2 / np.linalg.norm(x_vector2)
         y_vector = get_Y(z_vector, x_vector)
         y_vector2 = get_Y(z_vector, x_vector2)
+
         neighbors_transformed = transform(detection, x_vector, y_vector, z_vector, neighbors) # (N-1) x 3
         neighbors_transformed2 = transform(detection, x_vector2, y_vector2, z_vector, neighbors) # (N-1) x 3
+        if type=='fixed':
+            y_vector3= -y_vector
+            y_vector4 = -y_vector2
+            neighbors_transformed3 = transform(detection, x_vector, y_vector3, z_vector, neighbors)  # (N-1) x 3
+            neighbors_transformed4 = transform(detection, x_vector2, y_vector4, z_vector, neighbors)  # (N-1) x 3
+            sc3.append(get_shape_context(neighbors_transformed3, mean_distance))
+            sc4.append(get_shape_context(neighbors_transformed4, mean_distance))
         sc.append(get_shape_context(neighbors_transformed, mean_distance))
         sc2.append(get_shape_context(neighbors_transformed2, mean_distance))
-    return np.array(sc), np.array(sc2)
+    return np.array(sc), np.array(sc2), np.array(sc3), np.array(sc4)
