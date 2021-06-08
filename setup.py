@@ -26,7 +26,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='PlatyMatch',
-    version='0.0.2b',
+    version='0.0.3',
     author='Manan Lalit',
     author_email='lalit@mpi-cbg.de',
     license='BSD-3',
