@@ -52,7 +52,7 @@ Next, select `PlatyMatch` from `Plugins> Add Dock Widget`.
 
 ### Datasets
 
-Datasets are available as release assets **[here](https://github.com/juglab/PlatyMatch/releases/tag/v0.0.1)**.
+Datasets are available in **`bic_eccv_data.zip`** as release assets **[here](https://github.com/juglab/PlatyMatch/releases/tag/v0.0.1)**.
 These comprise of images, nuclei detections and keypoint locations for confocal images of 12 individual specimens under the `01-insitus` directory and static snapshots of a live embryo imaged through Light Sheet Microscopy under the `02-live` directory. 
 Folders with the same name in these two directories correspond in their developmental age, for example, `01-insitus/02` corresponds to `02-live/02`, `01-insitus/03` corresponds to `02-live/03` and so on.   
 
@@ -65,7 +65,8 @@ Folders with the same name in these two directories correspond in their developm
 	- Select the appropriate image in the drop down menu (for which nuclei detections are desired)
 	- Select **`Detect Nuclei`** from the drop-down menu
 	- Specify the anisotropy factor (`Anisotropy (Z)`) (i.e. the ratio of the size of the z pixel with respect to the x or y pixel. This factor is typically more than 1.0 because the z dimension is often undersampled)
-	- Click `Run Scale Space Log` button
+	- Ideally min scales and max scales should be estimated from your data (`min_scale` should be set as `min_radius/sqrt(3)` and `max_scale` should be set as `max_radius/sqrt(3)`. The default values of `min_scale=5` and `max_scale=9` generally works well).  
+	- Click `Run Scale Space Log` button. Please note that this step takes a few minutes.
 	- Wait until a confirmation message suggesting that nuclei detection is over shows up on the terminal
 	- Export the nuclei locations (`Export detections to csv`) to a csv file
 	- Repeat this step for all images which need to be matched
@@ -82,10 +83,8 @@ https://user-images.githubusercontent.com/34229641/120660618-cd5d3980-c487-11eb-
 	- Additionally if there is a header in the csv file, tick `Header` checkbox
 	- Load the detections for the `Moving Image`, which is defined as the image which will be transformed to later match another `fixed` image
 	- Load the detections for the `Fixed Image`
-	- If these two images correspond to the same imaging modality, then select the `Unsupervised` option under `Estimate Transform` checkbox (this corresponds to Intramodal Registration in the publication)
-	- If these two images correspond to different imaging modalities, then select the `Supervised` option under `Estimate Transform` checkbox (this corresponds to Intermodal Registration in the publication)
-	- For the Intramodal use case, click on `Run` pushbutton. Once the calculation is complete, a confirmation message shows up in the terminal. Export the transform matrix to a csv
-	- For the Intermodal use case, upload the locations of a few matching keypoints in both images. These locations serve to provide a good starting point for the transform calculation. Once the keypoint files have been uploaded for both the images, then click `Run` and then export the transform matrix to a csv file 
+	- Click on `Run` pushbutton. Once the calculation is complete, a confirmation message shows up in the terminal. Export the transform matrix to a csv (Note that this step can take a few minutes)
+	- It is also possible to estimate the transform in a `supervised` fashion. For this, upload the locations of a few matching keypoints in both images. These locations serve to provide a good starting point for the transform calculation. Once the keypoint files have been uploaded for both the images, then click `Run` and then export the transform matrix to a csv file 
 
 
 https://user-images.githubusercontent.com/34229641/120685628-53857a00-c4a0-11eb-8f92-7ffac730e28a.mp4
