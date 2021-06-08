@@ -230,7 +230,7 @@ class EstimateTransform(QWidget):
         self.phi_bins_lineedit.setAlignment(Qt.AlignCenter)
 
         self.ransac_iterations_label = QLabel('Number of RANSAC iterations:')
-        self.ransac_iterations_lineedit = QLineEdit('4000')
+        self.ransac_iterations_lineedit = QLineEdit('8000')
         self.ransac_iterations_lineedit.setAlignment(Qt.AlignCenter)
 
         self.ransac_samples_label = QLabel('Number of RANSAC samples:')
