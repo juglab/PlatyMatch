@@ -25,7 +25,7 @@ def _browse_detections(self):
         detections_df = pd.read_csv(name[0], skiprows=None, delimiter=' ', header=None)
     detections_numpy = detections_df.to_numpy()
     ids = detections_numpy[:, 0]  # first column should contain ids
-    detections = detections_numpy[:, 1:4] # N x 3
+    detections = detections_numpy[:, 1:4].astype(np.float) # N x 3
     if self.izyx_checkbox.isChecked():
         pass
     else:
@@ -38,7 +38,7 @@ def _browse_transform(self):
     name = QFileDialog.getOpenFileName(self, 'Open File')  # this returns a tuple!
     print("Opening transform {} ******".format(name[0]))
     transform_df = pd.read_csv(name[0], skiprows=None, delimiter=' ', header= None)
-    transform_numpy = transform_df.to_numpy()
+    transform_numpy = transform_df.to_numpy().astype(np.float)
     assert (transform_numpy.shape==(4,4)), 'Loaded transform does not hasve shape 4 x 4'
     return transform_numpy # 4 x 4
 
