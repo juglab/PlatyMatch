@@ -29,7 +29,7 @@ setup(
     version='0.0.3',
     author='Manan Lalit',
     author_email='lalit@mpi-cbg.de',
-    license='BSD-3',
+    license='CC-BY-NC-4.0',
     url='https://github.com/juglab/PlatyMatch',
     description='PlatyMatch allows registration of volumetric images of embryos by establishing correspondences between cells',
     long_description=read('README.md'),
