@@ -13,6 +13,7 @@ from platymatch.utils.utils import _visualize_nuclei, _browse_detections, _brows
     get_mean_distance
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QPushButton, QCheckBox, QLabel, QComboBox, QLineEdit, \
     QFileDialog, QProgressBar
+from napari.qt.threading import thread_worker
 from scipy.optimize import linear_sum_assignment
 from scipy.spatial.distance import cdist
 from tqdm import tqdm
@@ -22,6 +23,13 @@ class DetectNuclei(QWidget):
     def __init__(self, napari_viewer):
         super().__init__()
         self.viewer = napari_viewer
+        # define components
+        logo_path = 'platymatch/resources/platymatch_logo_small.png'
+        self.logo_label = QLabel(f'<h1><img src="{logo_path}"></h1>')
+        self.logo_label.setAlignment(Qt.AlignCenter)
+        self.method_description_label = QLabel(
+            '<small>Registration of Multi-modal Volumetric Images by Establishing <br>Cell Correspondence.<br> If you are using this in your research please <a href="https://github.com/juglab/PlatyMatch#citation" style="color:gray;">cite us</a>.</small><br><small><tt><a href="https://github.com/juglab/PlatyMatch" style="color:gray;">https://github.com/juglab/PlatyMatch</a></tt></small>')
+        self.method_description_label.setOpenExternalLinks(True)
 
         # define components
         self.sync_button = QPushButton('Sync with Viewer')
@@ -29,72 +37,108 @@ class DetectNuclei(QWidget):
         self.process_image_label = QLabel('Process Image')
         self.images_combo_box = QComboBox(self)
 
-        self.min_sigma_label = QLabel('Min Sigma:')
-        self.min_sigma_text = QLineEdit('5')
-        self.min_sigma_text.setAlignment(Qt.AlignCenter)
+        self.min_radius_label = QLabel('Min Radius')
+        self.min_radius_text = QLineEdit('9')
+        self.min_radius_text.setMaximumWidth(280)
+        self.min_radius_text.setAlignment(Qt.AlignCenter)
 
-        self.step_sigma_label = QLabel('Scale Sigma:')
-        self.step_sigma_text = QLineEdit('1')
-        self.step_sigma_text.setAlignment(Qt.AlignCenter)
+        self.step_radius_label = QLabel('Step')
+        self.step_radius_text = QLineEdit('1')
+        self.step_radius_text.setMaximumWidth(280)
+        self.step_radius_text.setAlignment(Qt.AlignCenter)
 
-        self.max_sigma_label = QLabel('Max Sigma:')
-        self.max_sigma_text = QLineEdit('9')
-        self.max_sigma_text.setAlignment(Qt.AlignCenter)
+        self.max_radius_label = QLabel('Max Radius')
+        self.max_radius_text = QLineEdit('15')
+        self.max_radius_text.setMaximumWidth(280)
+        self.max_radius_text.setAlignment(Qt.AlignCenter)
 
-        self.anisotropy_label = QLabel('Anisotropy (Z):')
+        self.anisotropy_label = QLabel('Anisotropy (Z)')
         self.anisotropy_text = QLineEdit('1.0')
+        self.anisotropy_text.setMaximumWidth(280)
         self.anisotropy_text.setAlignment(Qt.AlignCenter)
 
         self.run_button = QPushButton('Run Scale Space Log')
-        self.run_button.clicked.connect(self._click_run)
+        self.run_button.setMaximumWidth(280)
+        self.stop_button = QPushButton('Stop')
+        self.stop_button.setMaximumWidth(280)
+
+        self.run_button.clicked.connect(self._start_worker)
+        self.stop_button.clicked.connect(self._stop_worker)
 
         self.export_detections_button = QPushButton('Export Detections to csv')
+        self.export_detections_button.setMaximumWidth(280)
         self.export_detections_button.clicked.connect(self._export_detections)
 
         self.export_instance_mask_button = QPushButton('Export Instance Mask')
+        self.export_instance_mask_button.setMaximumWidth(280)
         self.export_instance_mask_button.clicked.connect(self._export_instance_mask)
 
         for layer in self.viewer.layers:
             self.images_combo_box.addItem(layer.name)
 
-        layout = QVBoxLayout()
-        grid = QGridLayout()
-        grid.addWidget(self.sync_button, 0, 0)
-        grid.addWidget(self.process_image_label, 1, 0)
-        grid.addWidget(self.images_combo_box, 1, 1)
-        grid.addWidget(self.min_sigma_label, 2, 0)
-        grid.addWidget(self.min_sigma_text, 2, 1)
-        grid.addWidget(self.max_sigma_label, 3, 0)
-        grid.addWidget(self.max_sigma_text, 3, 1)
-        grid.addWidget(self.step_sigma_label, 4, 0)
-        grid.addWidget(self.step_sigma_text, 4, 1)
-        grid.addWidget(self.anisotropy_label, 5, 0)
-        grid.addWidget(self.anisotropy_text, 5, 1)
-        grid.addWidget(self.run_button, 6, 0)
-        grid.setSpacing(10)
-        layout.addLayout(grid)
+        outer_layout = QVBoxLayout()
 
-        grid_2 = QGridLayout()
-        grid_2.addWidget(self.export_detections_button, 1, 0)
-        grid_2.addWidget(self.export_instance_mask_button, 1, 1)
-        grid_2.setSpacing(10)
-        layout.addLayout(grid_2)
-        self.setLayout(layout)
+        grid_0 = QGridLayout()
+        grid_0.addWidget(self.logo_label, 0, 0, 1, 1)
+        grid_0.addWidget(self.method_description_label, 0, 1, 1, 1)
+        grid_0.setSpacing(10)
+
+        grid_1 = QGridLayout()
+        grid_1.addWidget(self.sync_button, 0, 0)
+        grid_1.addWidget(self.process_image_label, 1, 0)
+        grid_1.addWidget(self.images_combo_box, 1, 1)
+        grid_1.addWidget(self.min_radius_label, 2, 0)
+        grid_1.addWidget(self.min_radius_text, 2, 1)
+        grid_1.addWidget(self.max_radius_label, 3, 0)
+        grid_1.addWidget(self.max_radius_text, 3, 1)
+        grid_1.addWidget(self.step_radius_label, 4, 0)
+        grid_1.addWidget(self.step_radius_text, 4, 1)
+        grid_1.addWidget(self.anisotropy_label, 5, 0)
+        grid_1.addWidget(self.anisotropy_text, 5, 1)
+        grid_1.addWidget(self.run_button, 6, 0)
+        grid_1.addWidget(self.stop_button, 6, 1)
+
+        grid_1.addWidget(self.export_detections_button, 8, 0)
+        grid_1.addWidget(self.export_instance_mask_button, 8, 1)
+        grid_1.setSpacing(10)
+
+
+
+        outer_layout.addLayout(grid_0)
+        outer_layout.addLayout(grid_1)
+        self.setLayout(outer_layout)
+        self.setFixedWidth(560)
 
     def _refresh(self):
         self.images_combo_box.clear()
         for layer in self.viewer.layers:
             self.images_combo_box.addItem(layer.name)
 
-    def _click_run(self):
+
+    def _finish(self):
+        self.run_button.setStyleSheet("")
+
+    def _stop_worker(self):
+        self.worker.quit()
+        self.run_button.setStyleSheet("")
         print("=" * 25)
-        print("Beginning Nuclei Detection for scales from {} to {}".format(self.min_sigma_text.text(),
-                                                                           self.max_sigma_text.text()))
+        print("Nuclei Detection for radii from {} to {} was stopped".format(self.min_radius_text.text(), self.max_radius_text.text()))
+
+    def _start_worker(self):
+        self.worker = self._click_run()
+        self.worker.finished.connect(self._finish)
+        self.worker.finished.connect(self.stop_button.clicked.disconnect)
+        self.worker.start()
+
+
+    @thread_worker
+    def _click_run(self):
+        self.run_button.setStyleSheet("border :3px solid green")
+        print("=" * 25)
+        print("Beginning Nuclei Detection for radii from {} to {}".format(self.min_radius_text.text(), self.max_radius_text.text()))
         image = self.viewer.layers[self.images_combo_box.currentIndex()].data
-        peaks_otsu, peaks_subset, log, peaks_local_minima, threshold = find_spheres(image, scales=range(
-            int(self.min_sigma_text.text()), int(self.max_sigma_text.text()), int(self.step_sigma_text.text())),
-                                                                                    anisotropy_factor=float(
-                                                                                        self.anisotropy_text.text()))
+        peaks_otsu, peaks_subset, log, peaks_local_minima, threshold = find_spheres(image, scales=range(int(np.round(float(self.min_radius_text.text())/np.sqrt(3))), int(np.round(float(self.max_radius_text.text())/np.sqrt(3))), int(self.step_radius_text.text())),
+                                                                                    anisotropy_factor=float(self.anisotropy_text.text()))
         _visualize_nuclei(self, peaks_subset)
         print("=" * 25)
         print("Nuclei detection is complete. Please export locations of these nuclei to a csv file or export an instance mask")
