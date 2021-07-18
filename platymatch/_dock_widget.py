@@ -787,14 +787,15 @@ class EvaluateMetrics(QWidget):
             self.transform_matrix_1 = _browse_transform(self)
         elif self.sender() == self.transform_pushbutton_2:
             self.transform_matrix_2 = _browse_transform(self)
+        self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
 
     def _calculate_metrics(self):
         # first associate keypoints with detections
         moving_kp_detection_cost_matrix = cdist(self.moving_keypoints.transpose(), self.moving_detections.transpose())
         moving_row_indices, moving_col_indices = linear_sum_assignment(moving_kp_detection_cost_matrix)
         moving_dictionary = {}
-        for index in moving_row_indices:  # 0 ... 11
-            moving_dictionary[self.moving_keypoint_ids[index]] = self.moving_ids[moving_col_indices[index]]  # 1...12 are keys ---> corresponding actual ids of moving detections
+        for index in moving_row_indices:
+            moving_dictionary[self.moving_keypoint_ids[index]] = self.moving_ids[moving_col_indices[index]]
 
         fixed_kp_detection_cost_matrix = cdist(self.fixed_keypoints.transpose(), self.fixed_detections.transpose())
         fixed_row_indices, fixed_col_indices = linear_sum_assignment(fixed_kp_detection_cost_matrix)
@@ -815,7 +816,8 @@ class EvaluateMetrics(QWidget):
             transformed_moving_detections = apply_affine_transform(transformed_moving_detections,
                                                                    self.transform_matrix_icp)
         else:
-            self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
+            pass
+            #self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
 
         # then apply linear sum assignment between transformed moving detections and fixed detections
         cost_matrix = cdist(transformed_moving_detections.transpose(), self.fixed_detections.transpose())
@@ -828,11 +830,13 @@ class EvaluateMetrics(QWidget):
         # evaluate accuracy
         hits = 0
         for key in moving_dictionary.keys():
-            if col_ids[np.where(row_ids == moving_dictionary[key])] == fixed_dictionary[key]:
-                hits += 1
+            if (key in fixed_dictionary.keys()):
+                if col_ids[np.where(row_ids == moving_dictionary[key])] == fixed_dictionary[key]:
+                    hits += 1
         print("=" * 25)
 
-        self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys())))
+        #self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys()))) # TODO
+        self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(fixed_dictionary.keys())))  # TODO
         print("Matching Accuracy is equal to {}".format(self.matching_accuracy_linedit.text()))
 
         # evaluate avg. registration error
