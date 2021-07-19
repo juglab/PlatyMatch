@@ -137,6 +137,7 @@ class DetectNuclei(QWidget):
         print("=" * 25)
         print("Beginning Nuclei Detection for radii from {} to {}".format(self.min_radius_text.text(), self.max_radius_text.text()))
         image = self.viewer.layers[self.images_combo_box.currentIndex()].data
+
         peaks_otsu, peaks_subset, log, peaks_local_minima, threshold = find_spheres(image, scales=range(int(np.round(float(self.min_radius_text.text())/np.sqrt(3))), int(np.round(float(self.max_radius_text.text())/np.sqrt(3))), int(self.step_radius_text.text())),
                                                                                     anisotropy_factor=float(self.anisotropy_text.text()))
         _visualize_nuclei(self, peaks_subset)
