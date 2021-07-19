@@ -286,6 +286,15 @@ class EstimateTransform(QWidget):
         self.fixed_keypoints_pushbutton.clicked.connect(self._browse)
         self.fixed_keypoints_pushbutton.hide()
 
+
+        self.shape_context_checkbox = QCheckBox('Shape Context')
+        self.shape_context_checkbox.setMaximumWidth(280)
+        self.pca_checkbox = QCheckBox('PCA')
+        self.pca_checkbox.setMaximumWidth(280)
+        self.shape_context_checkbox.setChecked(True)
+        self.shape_context_checkbox.clicked.connect(self._hide_shape_context)
+        self.pca_checkbox.clicked.connect(self._hide_shape_context)
+
         self.r_bins_label = QLabel('Number of r bins')
         self.r_bins_label.setMaximumWidth(280)
         self.r_bins_lineedit = QLineEdit('5')
@@ -324,7 +333,7 @@ class EstimateTransform(QWidget):
 
         self.run_button = QPushButton('Run')
         self.run_button.setMaximumWidth(280)
-        self.run_button.clicked.connect(self._click_run)
+        self.run_button.clicked.connect(self._start_worker)
         self.export_transform_button = QPushButton('Export Transform')
         self.export_transform_button.setMaximumWidth(280)
         self.export_transform_button.clicked.connect(self._save_transform)
@@ -371,20 +380,22 @@ class EstimateTransform(QWidget):
         grid_1.addWidget(self.moving_keypoints_pushbutton, 11, 1)
         grid_1.addWidget(self.fixed_keypoints_label, 12, 0)
         grid_1.addWidget(self.fixed_keypoints_pushbutton, 12, 1)
-        grid_1.addWidget(self.r_bins_label, 11, 0)
-        grid_1.addWidget(self.r_bins_lineedit, 11, 1)
-        grid_1.addWidget(self.theta_bins_label, 12, 0)
-        grid_1.addWidget(self.theta_bins_lineedit, 12, 1)
-        grid_1.addWidget(self.phi_bins_label, 13, 0)
-        grid_1.addWidget(self.phi_bins_lineedit, 13, 1)
-        grid_1.addWidget(self.ransac_samples_label, 14, 0)
-        grid_1.addWidget(self.ransac_samples_lineedit, 14, 1)
-        grid_1.addWidget(self.ransac_iterations_label, 15, 0)
-        grid_1.addWidget(self.ransac_iterations_lineedit, 15, 1)
-        grid_1.addWidget(self.icp_iterations_label, 16, 0)
-        grid_1.addWidget(self.icp_iterations_lineedit, 16, 1)
-        grid_1.addWidget(self.run_button, 17, 0)
-        grid_1.addWidget(self.export_transform_button, 17, 1)
+        grid_1.addWidget(self.shape_context_checkbox, 11, 0)
+        grid_1.addWidget(self.pca_checkbox, 11, 1)
+        grid_1.addWidget(self.r_bins_label, 12, 0)
+        grid_1.addWidget(self.r_bins_lineedit, 12, 1)
+        grid_1.addWidget(self.theta_bins_label, 13, 0)
+        grid_1.addWidget(self.theta_bins_lineedit, 13, 1)
+        grid_1.addWidget(self.phi_bins_label, 14, 0)
+        grid_1.addWidget(self.phi_bins_lineedit, 14, 1)
+        grid_1.addWidget(self.ransac_samples_label, 15, 0)
+        grid_1.addWidget(self.ransac_samples_lineedit, 15, 1)
+        grid_1.addWidget(self.ransac_iterations_label, 16, 0)
+        grid_1.addWidget(self.ransac_iterations_lineedit, 16, 1)
+        grid_1.addWidget(self.icp_iterations_label, 17, 0)
+        grid_1.addWidget(self.icp_iterations_lineedit, 17, 1)
+        grid_1.addWidget(self.run_button, 18, 0)
+        grid_1.addWidget(self.export_transform_button, 18, 1)
         grid_1.setSpacing(10)
 
         layout.addLayout(grid_1)
@@ -448,7 +459,18 @@ class EstimateTransform(QWidget):
             self.fixed_keypoints_label.show()
             self.fixed_keypoints_pushbutton.show()
 
+    def _finish(self):
+        self.run_button.setStyleSheet("")
+
+    def _start_worker(self):
+        self.worker = self._click_run()
+        self.worker.finished.connect(self._finish)
+        #self.worker.finished.connect(self.stop_button.clicked.disconnect)
+        self.worker.start()
+
+    @thread_worker
     def _click_run(self):
+        self.run_button.setStyleSheet("border :3px solid green")
         moving_nucleus_size = []
         fixed_nucleus_size = []
         if (not self.csv_checkbox.isChecked()):
@@ -720,6 +742,67 @@ class EstimateTransform(QWidget):
             self.izyx_checkbox.show()
             self.header_checkbox.show()
 
+    def _hide_shape_context(self):
+        if self.sender()==self.shape_context_checkbox and self.shape_context_checkbox.isChecked():
+
+            self.ransac_samples_lineedit.show()
+            self.ransac_samples_label.show()
+            self.ransac_iterations_lineedit.show()
+            self.ransac_iterations_label.show()
+            self.icp_iterations_lineedit.show()
+            self.icp_iterations_label.show()
+            self.r_bins_lineedit.show()
+            self.r_bins_label.show()
+            self.theta_bins_lineedit.show()
+            self.theta_bins_label.show()
+            self.phi_bins_lineedit.show()
+            self.phi_bins_label.show()
+
+
+            self.pca_checkbox.setChecked(False)
+        elif self.sender() == self.shape_context_checkbox and not self.shape_context_checkbox.isChecked():
+            self.ransac_samples_lineedit.hide()
+            self.ransac_samples_label.hide()
+            self.ransac_iterations_lineedit.hide()
+            self.ransac_iterations_label.hide()
+            self.icp_iterations_lineedit.hide()
+            self.icp_iterations_label.hide()
+            self.r_bins_lineedit.hide()
+            self.r_bins_label.hide()
+            self.theta_bins_lineedit.hide()
+            self.theta_bins_label.hide()
+            self.phi_bins_lineedit.hide()
+            self.phi_bins_label.hide()
+
+            self.pca_checkbox.setChecked(True)
+        elif self.sender() == self.pca_checkbox and self.pca_checkbox.isChecked():
+            self.ransac_samples_lineedit.hide()
+            self.ransac_samples_label.hide()
+            self.ransac_iterations_lineedit.hide()
+            self.ransac_iterations_label.hide()
+            self.icp_iterations_lineedit.hide()
+            self.icp_iterations_label.hide()
+            self.r_bins_lineedit.hide()
+            self.r_bins_label.hide()
+            self.theta_bins_lineedit.hide()
+            self.theta_bins_label.hide()
+            self.phi_bins_lineedit.hide()
+            self.phi_bins_label.hide()
+            self.shape_context_checkbox.setChecked(False)
+        elif self.sender() == self.pca_checkbox and not self.pca_checkbox.isChecked():
+            self.ransac_samples_lineedit.show()
+            self.ransac_samples_label.show()
+            self.ransac_iterations_lineedit.show()
+            self.ransac_iterations_label.show()
+            self.icp_iterations_lineedit.show()
+            self.icp_iterations_label.show()
+            self.r_bins_lineedit.show()
+            self.r_bins_label.show()
+            self.theta_bins_lineedit.show()
+            self.theta_bins_label.show()
+            self.phi_bins_lineedit.show()
+            self.phi_bins_label.show()
+            self.shape_context_checkbox.setChecked(True)
 
 class EvaluateMetrics(QWidget):
     def __init__(self, napari_viewer):
@@ -1003,7 +1086,13 @@ class EvaluateMetrics(QWidget):
             self.moving_image_combobox.addItem(layer.name)
             self.fixed_image_combobox.addItem(layer.name)
 
+class NonLinearTransform(QWidget):
+    # Non Rigid Transform (Simple ITK)
+    # Voxel Morph
+    def __init__(self, napari_viewer):
+        pass
+
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
-    return [DetectNuclei, EstimateTransform, EvaluateMetrics]
+    return [DetectNuclei, EstimateTransform, EvaluateMetrics, NonLinearTransform]
