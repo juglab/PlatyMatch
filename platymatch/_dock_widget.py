@@ -3,6 +3,7 @@ import csv
 import numpy as np
 import tifffile
 from PyQt5.QtCore import Qt
+from napari.qt.threading import thread_worker
 from napari_plugin_engine import napari_hook_implementation
 from platymatch.detect_nuclei.ss_log import find_spheres
 from platymatch.estimate_transform.apply_transform import apply_affine_transform
@@ -13,7 +14,6 @@ from platymatch.utils.utils import _visualize_nuclei, _browse_detections, _brows
     get_mean_distance
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QPushButton, QCheckBox, QLabel, QComboBox, QLineEdit, \
     QFileDialog, QProgressBar
-from napari.qt.threading import thread_worker
 from scipy.optimize import linear_sum_assignment
 from scipy.spatial.distance import cdist
 from tqdm import tqdm
@@ -102,8 +102,6 @@ class DetectNuclei(QWidget):
         grid_1.addWidget(self.export_instance_mask_button, 8, 1)
         grid_1.setSpacing(10)
 
-
-
         outer_layout.addLayout(grid_0)
         outer_layout.addLayout(grid_1)
         self.setLayout(outer_layout)
@@ -114,7 +112,6 @@ class DetectNuclei(QWidget):
         for layer in self.viewer.layers:
             self.images_combo_box.addItem(layer.name)
 
-
     def _finish(self):
         self.run_button.setStyleSheet("")
 
@@ -122,7 +119,8 @@ class DetectNuclei(QWidget):
         self.worker.quit()
         self.run_button.setStyleSheet("")
         print("=" * 25)
-        print("Nuclei Detection for radii from {} to {} was stopped".format(self.min_radius_text.text(), self.max_radius_text.text()))
+        print("Nuclei Detection for radii from {} to {} was stopped".format(self.min_radius_text.text(),
+                                                                            self.max_radius_text.text()))
 
     def _start_worker(self):
         self.worker = self._click_run()
@@ -130,20 +128,24 @@ class DetectNuclei(QWidget):
         self.worker.finished.connect(self.stop_button.clicked.disconnect)
         self.worker.start()
 
-
     @thread_worker
     def _click_run(self):
         self.run_button.setStyleSheet("border :3px solid green")
         print("=" * 25)
-        print("Beginning Nuclei Detection for radii from {} to {}".format(self.min_radius_text.text(), self.max_radius_text.text()))
+        print("Beginning Nuclei Detection for radii from {} to {}".format(self.min_radius_text.text(),
+                                                                          self.max_radius_text.text()))
         image = self.viewer.layers[self.images_combo_box.currentIndex()].data
 
-        peaks_otsu, peaks_subset, log, peaks_local_minima, threshold = find_spheres(image, scales=range(int(np.round(float(self.min_radius_text.text())/np.sqrt(3))), int(np.round(float(self.max_radius_text.text())/np.sqrt(3))), int(self.step_radius_text.text())),
-                                                                                    anisotropy_factor=float(self.anisotropy_text.text()))
+        peaks_otsu, peaks_subset, log, peaks_local_minima, threshold = find_spheres(image, scales=range(
+            int(np.round(float(self.min_radius_text.text()) / np.sqrt(3))),
+            int(np.round(float(self.max_radius_text.text()) / np.sqrt(3))), int(self.step_radius_text.text())),
+                                                                                    anisotropy_factor=float(
+                                                                                        self.anisotropy_text.text()))
         _visualize_nuclei(self, peaks_subset)
         print("=" * 25)
-        print("Nuclei detection is complete. Please export locations of these nuclei to a csv file or export an instance mask")
-        
+        print(
+            "Nuclei detection is complete. Please export locations of these nuclei to a csv file or export an instance mask")
+
     def _export_detections(self):
         save_file_name = QFileDialog.getSaveFileName(self, 'Save File')  # this returns a tuple!
         print("=" * 25)
@@ -285,7 +287,6 @@ class EstimateTransform(QWidget):
         self.fixed_keypoints_label.hide()
         self.fixed_keypoints_pushbutton.clicked.connect(self._browse)
         self.fixed_keypoints_pushbutton.hide()
-
 
         self.shape_context_checkbox = QCheckBox('Shape Context')
         self.shape_context_checkbox.setMaximumWidth(280)
@@ -465,7 +466,7 @@ class EstimateTransform(QWidget):
     def _start_worker(self):
         self.worker = self._click_run()
         self.worker.finished.connect(self._finish)
-        #self.worker.finished.connect(self.stop_button.clicked.disconnect)
+        # self.worker.finished.connect(self.stop_button.clicked.disconnect)
         self.worker.start()
 
     @thread_worker
@@ -515,11 +516,11 @@ class EstimateTransform(QWidget):
             print("Generating Unaries")
 
             unary_11, unary_12, _, _ = get_unary(moving_centroid, mean_distance=moving_mean_distance,
-                                           detections=self.moving_detections, type='moving', transposed=False)  # (N, 360)
+                                                 detections=self.moving_detections, type='moving',
+                                                 transposed=False)  # (N, 360)
             unary_21, unary_22, unary_23, unary_24 = get_unary(fixed_centroid, mean_distance=fixed_mean_distance,
-                                           detections=self.fixed_detections, type='fixed', transposed=False)
-
-
+                                                               detections=self.fixed_detections, type='fixed',
+                                                               transposed=False)
 
             U11 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
             U12 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
@@ -529,7 +530,6 @@ class EstimateTransform(QWidget):
             U22 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
             U23 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
             U24 = np.zeros((self.moving_detections.shape[1], self.fixed_detections.shape[1]))  # N1 x N2
-
 
             for i in range(U11.shape[0]):
                 for j in range(U11.shape[1]):
@@ -542,7 +542,6 @@ class EstimateTransform(QWidget):
                     unary_i = unary_11[i]
                     unary_j = unary_22[j]
                     U12[i, j] = get_unary_distance(unary_i, unary_j)
-
 
             for i in range(U13.shape[0]):
                 for j in range(U13.shape[1]):
@@ -568,7 +567,6 @@ class EstimateTransform(QWidget):
                     unary_j = unary_22[j]
                     U22[i, j] = get_unary_distance(unary_i, unary_j)
 
-
             for i in range(U23.shape[0]):
                 for j in range(U23.shape[1]):
                     unary_i = unary_12[i]
@@ -590,99 +588,95 @@ class EstimateTransform(QWidget):
             row_indices_23, col_indices_23 = linear_sum_assignment(U23)
             row_indices_24, col_indices_24 = linear_sum_assignment(U24)
 
-
             if (len(moving_nucleus_size) == 0 or len(fixed_nucleus_size) == 0):
                 ransac_error = 16  # approx average nucleus radius
             else:
                 ransac_error = 0.5 * (np.average(moving_nucleus_size) ** (1 / 3) + np.average(fixed_nucleus_size) ** (
-                            1 / 3))  # approx average nucleus radius
+                        1 / 3))  # approx average nucleus radius
 
             print("=" * 25)
             print("Beginning RANSAC")
             transform_matrix_11, inliers_best_11 = do_ransac(moving_detections_copy[:, row_indices_11],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_11],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
+                                                             fixed_detections_copy[:, col_indices_11],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
             transform_matrix_12, inliers_best_12 = do_ransac(moving_detections_copy[:, row_indices_12],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_12],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
+                                                             fixed_detections_copy[:, col_indices_12],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_13, inliers_best_13 = do_ransac(moving_detections_copy[:, row_indices_13],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_13],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
-
+                                                             fixed_detections_copy[:, col_indices_13],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_14, inliers_best_14 = do_ransac(moving_detections_copy[:, row_indices_14],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_14],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
+                                                             fixed_detections_copy[:, col_indices_14],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_21, inliers_best_21 = do_ransac(moving_detections_copy[:, row_indices_21],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_21],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
-
+                                                             fixed_detections_copy[:, col_indices_21],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_22, inliers_best_22 = do_ransac(moving_detections_copy[:, row_indices_22],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_22],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
-
+                                                             fixed_detections_copy[:, col_indices_22],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_23, inliers_best_23 = do_ransac(moving_detections_copy[:, row_indices_23],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_23],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
-
+                                                             fixed_detections_copy[:, col_indices_23],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             transform_matrix_24, inliers_best_24 = do_ransac(moving_detections_copy[:, row_indices_24],  # 4 x N
-                                                           fixed_detections_copy[:, col_indices_24],  # 4 x N
-                                                           min_samples=int(self.ransac_samples_lineedit.text()),
-                                                           trials=int(self.ransac_iterations_lineedit.text()),
-                                                           error=ransac_error,
-                                                           transform=self.transform_combobox.currentText())
-
+                                                             fixed_detections_copy[:, col_indices_24],  # 4 x N
+                                                             min_samples=int(self.ransac_samples_lineedit.text()),
+                                                             trials=int(self.ransac_iterations_lineedit.text()),
+                                                             error=ransac_error,
+                                                             transform=self.transform_combobox.currentText())
 
             print("=" * 25)
             print("RANSAC # Inliers 11 = {} and # Inliers 12 = {} and # Inliers 13 = {} and # Inliers 14 = {} "
-                  "and # Inliers 21 = {} and # Inliers 22 = {} and # Inliers 23 = {} and # Inliers 24 = {}".format(inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21,
-                                                                                                                   inliers_best_22, inliers_best_23, inliers_best_24))
+                  "and # Inliers 21 = {} and # Inliers 22 = {} and # Inliers 23 = {} and # Inliers 24 = {}".format(
+                inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21,
+                inliers_best_22, inliers_best_23, inliers_best_24))
 
-            inliers = np.array([inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21, inliers_best_22, inliers_best_23, inliers_best_24])
+            inliers = np.array(
+                [inliers_best_11, inliers_best_12, inliers_best_13, inliers_best_14, inliers_best_21, inliers_best_22,
+                 inliers_best_23, inliers_best_24])
 
-            if np.argmax(inliers) ==0:
+            if np.argmax(inliers) == 0:
                 self.transform_matrix_sc = transform_matrix_11
-            elif np.argmax(inliers) ==1:
+            elif np.argmax(inliers) == 1:
                 self.transform_matrix_sc = transform_matrix_12
-            elif np.argmax(inliers) ==2:
+            elif np.argmax(inliers) == 2:
                 self.transform_matrix_sc = transform_matrix_13
-            elif np.argmax(inliers) ==3:
+            elif np.argmax(inliers) == 3:
                 self.transform_matrix_sc = transform_matrix_14
-            elif np.argmax(inliers) ==4:
+            elif np.argmax(inliers) == 4:
                 self.transform_matrix_sc = transform_matrix_21
-            elif np.argmax(inliers) ==5:
+            elif np.argmax(inliers) == 5:
                 self.transform_matrix_sc = transform_matrix_22
-            elif np.argmax(inliers) ==6:
+            elif np.argmax(inliers) == 6:
                 self.transform_matrix_sc = transform_matrix_23
-            elif np.argmax(inliers) ==7:
+            elif np.argmax(inliers) == 7:
                 self.transform_matrix_sc = transform_matrix_24
-
 
             print("=" * 25)
             print("4 x 4 Transform matrix estimated from Shape Context Approach is \n", self.transform_matrix_sc)
@@ -743,7 +737,7 @@ class EstimateTransform(QWidget):
             self.header_checkbox.show()
 
     def _hide_shape_context(self):
-        if self.sender()==self.shape_context_checkbox and self.shape_context_checkbox.isChecked():
+        if self.sender() == self.shape_context_checkbox and self.shape_context_checkbox.isChecked():
 
             self.ransac_samples_lineedit.show()
             self.ransac_samples_label.show()
@@ -757,7 +751,6 @@ class EstimateTransform(QWidget):
             self.theta_bins_label.show()
             self.phi_bins_lineedit.show()
             self.phi_bins_label.show()
-
 
             self.pca_checkbox.setChecked(False)
         elif self.sender() == self.shape_context_checkbox and not self.shape_context_checkbox.isChecked():
@@ -804,51 +797,76 @@ class EstimateTransform(QWidget):
             self.phi_bins_label.show()
             self.shape_context_checkbox.setChecked(True)
 
+
 class EvaluateMetrics(QWidget):
     def __init__(self, napari_viewer):
         super().__init__()
         self.viewer = napari_viewer
 
         # define components
+        logo_path = 'platymatch/resources/platymatch_logo_small.png'
+        self.logo_label = QLabel(f'<h1><img src="{logo_path}"></h1>')
+        self.logo_label.setAlignment(Qt.AlignCenter)
+        self.method_description_label = QLabel(
+            '<small>Registration of Multi-modal Volumetric Images by Establishing <br>Cell Correspondence.<br> If you are using this in your research please <a href="https://github.com/juglab/PlatyMatch#citation" style="color:gray;">cite us</a>.</small><br><small><tt><a href="https://github.com/juglab/PlatyMatch" style="color:gray;">https://github.com/juglab/PlatyMatch</a></tt></small>')
+        self.method_description_label.setOpenExternalLinks(True)
+
+        # define components
         self.sync_button = QPushButton('Sync with Viewer')
+        self.sync_button.setMaximumWidth(280)
         self.sync_button.clicked.connect(self._refresh)
         self.moving_image_label = QLabel('Moving Image:')
+        self.moving_image_label.setMaximumWidth(280)
         self.moving_image_combobox = QComboBox(self)
+        self.moving_image_combobox.setMaximumWidth(280)
         self.moving_image_anisotropy_label = QLabel('Moving Image Anisotropy [Z]:')
+        self.moving_image_anisotropy_label.setMaximumWidth(280)
         self.moving_image_anisotropy_line = QLineEdit('1.0')
+        self.moving_image_anisotropy_line.setMaximumWidth(280)
+        self.moving_image_anisotropy_line.setAlignment(Qt.AlignCenter)
 
         self.fixed_image_label = QLabel('Fixed Image:')
+        self.fixed_image_label.setMaximumWidth(280)
         self.fixed_image_combobox = QComboBox(self)
+        self.fixed_image_combobox.setMaximumWidth(280)
         self.fixed_image_anisotropy_label = QLabel('Fixed Image Anisotropy [Z]:')
+        self.fixed_image_anisotropy_label.setMaximumWidth(280)
         self.fixed_image_anisotropy_line = QLineEdit('1.0')
+        self.fixed_image_anisotropy_line.setMaximumWidth(280)
+        self.fixed_image_anisotropy_line.setAlignment(Qt.AlignCenter)
 
         self.transform_label = QLabel('Transform:')
+        self.transform_label.setMaximumWidth(280)
         self.transform_pushbutton = QPushButton('Load')
+        self.transform_pushbutton.setMaximumWidth(280)
         self.transform_pushbutton.clicked.connect(self._load_transform)
 
-        self.transform_label_2 = QLabel('Transform (Optional):')
-        self.transform_pushbutton_2 = QPushButton('Load')
-        self.transform_pushbutton_2.clicked.connect(self._load_transform)
-
-        self.icp_checkbox = QCheckBox('ICP?')
-
         self.csv_checkbox = QCheckBox('csv?')
+        self.csv_checkbox.setMaximumWidth(280)
         self.csv_checkbox.clicked.connect(self._open_text_file)
         self.izyx_checkbox = QCheckBox('IZYXR?')
+        self.izyx_checkbox.setMaximumWidth(280)
         self.izyx_checkbox.hide()
         self.header_checkbox = QCheckBox('Header?')
+        self.header_checkbox.setMaximumWidth(280)
         self.header_checkbox.hide()
 
         self.moving_image_2_combobox = QComboBox(self)
+        self.moving_image_2_combobox.setMaximumWidth(280)
         self.fixed_image_2_combobox = QComboBox(self)
+        self.fixed_image_2_combobox.setMaximumWidth(280)
 
         self.moving_detections_label = QLabel('Moving Detections:')
+        self.moving_detections_label.setMaximumWidth(280)
         self.moving_detections_pushbutton = QPushButton('Load')
+        self.moving_detections_pushbutton.setMaximumWidth(280)
         self.moving_detections_pushbutton.hide()
         self.moving_detections_pushbutton.clicked.connect(self._browse)
 
         self.fixed_detections_label = QLabel('Fixed Detections:')
+        self.fixed_detections_label.setMaximumWidth(280)
         self.fixed_detections_pushbutton = QPushButton('Load')
+        self.fixed_detections_pushbutton.setMaximumWidth(280)
         self.fixed_detections_pushbutton.hide()
         self.fixed_detections_pushbutton.clicked.connect(self._browse)
 
@@ -856,26 +874,43 @@ class EvaluateMetrics(QWidget):
         self.fixed_progress_bar = QProgressBar(self)
 
         self.moving_keypoints_label = QLabel('Moving Keypoints:')
+        self.moving_keypoints_label.setMaximumWidth(280)
         self.moving_keypoints_pushbutton = QPushButton('Load')
+        self.moving_keypoints_pushbutton.setMaximumWidth(280)
         self.moving_keypoints_pushbutton.clicked.connect(self._browse)
 
         self.fixed_keypoints_label = QLabel('Fixed Keypoints:')
+        self.fixed_keypoints_label.setMaximumWidth(280)
         self.fixed_keypoints_pushbutton = QPushButton('Load')
+        self.fixed_keypoints_pushbutton.setMaximumWidth(280)
         self.fixed_keypoints_pushbutton.clicked.connect(self._browse)
 
-        self.run_button = QPushButton('Run')
+        self.run_button = QPushButton('Evaluate Metrics')
+        self.run_button.setMaximumWidth(280)
         self.run_button.clicked.connect(self._calculate_metrics)
         self.export_transformed_image_button = QPushButton('Export Transformed Image')
+        self.export_transformed_image_button.setMaximumWidth(280)
         self.export_transformed_image_button.clicked.connect(self._export_transformed_image)
 
         self.matching_accuracy_label = QLabel('Matching Accuracy:')
+        self.matching_accuracy_label.setMaximumWidth(280)
         self.matching_accuracy_linedit = QLineEdit('')
+        self.matching_accuracy_linedit.setMaximumWidth(280)
 
         self.avg_registration_error_label = QLabel('Average Registration Error:')
+        self.avg_registration_error_label.setMaximumWidth(280)
         self.avg_registration_error_lineedit = QLineEdit('')
+        self.avg_registration_error_lineedit.setMaximumWidth(280)
 
         # define layout
         layout = QVBoxLayout()
+
+        grid_0 = QGridLayout()
+        grid_0.addWidget(self.logo_label, 0, 0, 1, 1)
+        grid_0.addWidget(self.method_description_label, 0, 1, 1, 1)
+        grid_0.setSpacing(10)
+        layout.addLayout(grid_0)
+
         grid_1 = QGridLayout()
         grid_1.addWidget(self.sync_button, 0, 0)
         grid_1.addWidget(self.moving_image_label, 1, 0)
@@ -891,49 +926,39 @@ class EvaluateMetrics(QWidget):
         grid_1.addWidget(self.transform_label, 5, 0)
         grid_1.addWidget(self.transform_pushbutton, 5, 1)
 
-        grid_1.addWidget(self.transform_label_2, 6, 0)
-        grid_1.addWidget(self.transform_pushbutton_2, 6, 1)
+        grid_1.addWidget(self.export_transformed_image_button, 6, 1)
 
-        grid_1.addWidget(self.icp_checkbox, 7, 0)
+        grid_1.addWidget(self.csv_checkbox, 7, 0)
+        grid_1.addWidget(self.izyx_checkbox, 7, 1)
+        grid_1.addWidget(self.header_checkbox, 8, 1)
+
+        grid_1.addWidget(self.moving_detections_label, 9, 0)
+        grid_1.addWidget(self.moving_image_2_combobox, 9, 1)
+        grid_1.addWidget(self.moving_detections_pushbutton, 9, 1)
+
+        grid_1.addWidget(self.moving_progress_bar, 10, 0, 1, 2)
+
+        grid_1.addWidget(self.fixed_detections_label, 11, 0)
+        grid_1.addWidget(self.fixed_image_2_combobox, 11, 1)
+        grid_1.addWidget(self.fixed_detections_pushbutton, 11, 1)
+        grid_1.addWidget(self.fixed_progress_bar, 12, 0, 1, 2)
+
+        grid_1.addWidget(self.moving_keypoints_label, 13, 0)
+        grid_1.addWidget(self.moving_keypoints_pushbutton, 13, 1)
+
+        grid_1.addWidget(self.fixed_keypoints_label, 14, 0)
+        grid_1.addWidget(self.fixed_keypoints_pushbutton, 14, 1)
+        grid_1.addWidget(self.run_button, 15, 0)
+        grid_1.addWidget(self.matching_accuracy_label, 16, 0)
+        grid_1.addWidget(self.matching_accuracy_linedit, 16, 1)
+        grid_1.addWidget(self.avg_registration_error_label, 17, 0)
+        grid_1.addWidget(self.avg_registration_error_lineedit, 17, 1)
 
         grid_1.setSpacing(10)
         layout.addLayout(grid_1)
 
-        grid_2 = QGridLayout()
-        grid_2.addWidget(self.csv_checkbox, 0, 0)
-        grid_2.addWidget(self.izyx_checkbox, 0, 1)
-        grid_2.addWidget(self.header_checkbox, 0, 2)
-
-        grid_2.addWidget(self.moving_detections_label, 1, 0)
-        grid_2.addWidget(self.moving_image_2_combobox, 1, 1)
-        grid_2.addWidget(self.moving_detections_pushbutton, 1, 1)
-
-        grid_2.addWidget(self.moving_progress_bar, 2, 0, 1, 2)
-
-        grid_2.addWidget(self.fixed_detections_label, 3, 0)
-        grid_2.addWidget(self.fixed_image_2_combobox, 3, 1)
-        grid_2.addWidget(self.fixed_detections_pushbutton, 3, 1)
-        grid_2.addWidget(self.fixed_progress_bar, 4, 0, 1, 2)
-
-        grid_2.addWidget(self.moving_keypoints_label, 5, 0)
-        grid_2.addWidget(self.moving_keypoints_pushbutton, 5, 1)
-
-        grid_2.addWidget(self.fixed_keypoints_label, 6, 0)
-        grid_2.addWidget(self.fixed_keypoints_pushbutton, 6, 1)
-
-        grid_2.setSpacing(10)
-        layout.addLayout(grid_2)
-
-        grid_3 = QGridLayout()
-        grid_3.addWidget(self.run_button, 0, 0)
-        grid_3.addWidget(self.export_transformed_image_button, 0, 1)
-        grid_3.addWidget(self.matching_accuracy_label, 1, 0)
-        grid_3.addWidget(self.matching_accuracy_linedit, 1, 1)
-        grid_3.addWidget(self.avg_registration_error_label, 2, 0)
-        grid_3.addWidget(self.avg_registration_error_lineedit, 2, 1)
-        grid_3.setSpacing(10)
-        layout.addLayout(grid_3)
         self.setLayout(layout)
+        self.setFixedWidth(560)
         self.transform_matrix_2 = np.identity(4)  # just a placeholder, if a second matrix exists, this is replaced !!
 
     def _browse(self):
@@ -982,7 +1007,7 @@ class EvaluateMetrics(QWidget):
                                                                    self.transform_matrix_icp)
         else:
             pass
-            #self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
+            # self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
 
         # then apply linear sum assignment between transformed moving detections and fixed detections
         cost_matrix = cdist(transformed_moving_detections.transpose(), self.fixed_detections.transpose())
@@ -1000,7 +1025,7 @@ class EvaluateMetrics(QWidget):
                     hits += 1
         print("=" * 25)
 
-        #self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys()))) # TODO
+        # self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys()))) # TODO
         self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(fixed_dictionary.keys())))  # TODO
         print("Matching Accuracy is equal to {}".format(self.matching_accuracy_linedit.text()))
 
@@ -1008,7 +1033,9 @@ class EvaluateMetrics(QWidget):
         transformed_moving_keypoints = apply_affine_transform(self.moving_keypoints, self.transform_matrix_combined)
         distance = 0
         for i in range(transformed_moving_keypoints.shape[1]):
-            distance += np.linalg.norm([self.fixed_keypoints.transpose()[np.where(self.fixed_keypoint_ids == self.moving_keypoint_ids[i]), :] - transformed_moving_keypoints.transpose()[i, :]])
+            distance += np.linalg.norm([self.fixed_keypoints.transpose()[
+                                        np.where(self.fixed_keypoint_ids == self.moving_keypoint_ids[i]),
+                                        :] - transformed_moving_keypoints.transpose()[i, :]])
 
         print("=" * 25)
         self.avg_registration_error_lineedit.setText("{:.3f}".format(distance / len(moving_dictionary.keys())))
@@ -1085,6 +1112,7 @@ class EvaluateMetrics(QWidget):
         for layer in self.viewer.layers:
             self.moving_image_combobox.addItem(layer.name)
             self.fixed_image_combobox.addItem(layer.name)
+
 
 class NonLinearTransform(QWidget):
     # Non Rigid Transform (Simple ITK)
