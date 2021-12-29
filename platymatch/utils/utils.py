@@ -29,7 +29,7 @@ def _browse_detections(self):
     if self.izyx_checkbox.isChecked():
         pass
     else:
-        detections = np.flip(detections, 1) # N x 3
+        detections = np.flip(detections, 1) # N x 3 --> make everything z y x style!
 
     return detections.transpose(), ids.transpose() # 3 x N, 1 x N
 
@@ -39,7 +39,7 @@ def _browse_transform(self):
     print("Opening transform {} ******".format(name[0]))
     transform_df = pd.read_csv(name[0], skiprows=None, delimiter=' ', header= None)
     transform_numpy = transform_df.to_numpy().astype(np.float)
-    assert (transform_numpy.shape==(4,4)), 'Loaded transform does not hasve shape 4 x 4'
+    assert (transform_numpy.shape==(4,4)), 'Loaded transform does not have shape 4 x 4'
     return transform_numpy # 4 x 4
 
 
