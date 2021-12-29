@@ -1,0 +1,10 @@
+
+# Add labels the plugin from the EDAM Bioimaging ontology
+labels:
+  ontology: EDAM-BIOIMAGING:alpha06
+  terms:
+  - Image registration
+  - 3D image
+  - Light-sheet microscopy
+  - Confocal microscopy
+  - Shape features extraction
