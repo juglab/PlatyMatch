@@ -47,7 +47,7 @@ def _browse_transform(self):
 
 def get_centroid(detections, transposed = True):
     """
-    :param detections: N x 3/4 or 3/4 x N
+    :param detections: N x 3/4 (transpposed = True) or 3/4 x N (transposed = False)
     :return: 3 x 1
     """
     if (transposed):  # N x 4
@@ -55,16 +55,16 @@ def get_centroid(detections, transposed = True):
     else: # 4 x N
         return np.mean(detections[:3, :], 1, keepdims=True)
 
-def get_mean_distance(detections, transposed = False):
+def get_mean_distance(detections, transposed = True):
     """
     :param detections: 3 x N
     :return:
     """
 
-    if (transposed): # 3 x N
+    if (transposed): # N x 3
         pass
-    else: # N x 3
-        detections = detections.transpose() # N x 3
+    else: # 3/4 x N as intended
+        detections = detections.transpose() # N x 3/4
 
     if detections.shape[1] == 4:
         detections = detections[:, :3] # N x 3
