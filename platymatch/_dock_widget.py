@@ -611,7 +611,7 @@ class EstimateTransform(QWidget):
                 row_indices_24, col_indices_24 = linear_sum_assignment(U24)
 
                 if (len(moving_nucleus_size) == 0 or len(fixed_nucleus_size) == 0):
-                    ransac_error = 16  # approx average nucleus radius # TODO --> it was set to 16 before!
+                    ransac_error = 16  # approx average nucleus radius # TODO
                 else:
                     ransac_error = 0.5 * (
                             np.average(moving_nucleus_size) ** (1 / 3) + np.average(fixed_nucleus_size) ** (
@@ -1046,20 +1046,6 @@ class EvaluateMetrics(QWidget):
         transformed_moving_detections = apply_affine_transform(transformed_moving_detections,
                                                                self.transform_matrix_2)  # 3 x N
 
-        # if icp is checked, apply icp
-        # TODO
-        # if self.icp_checkbox.isChecked():
-        #     self.transform_matrix_icp = perform_icp(transformed_moving_detections, self.fixed_detections, 50, 'Affine')
-        #     self.transform_matrix_combined = np.matmul(self.transform_matrix_icp,
-        #                                                np.matmul(self.transform_matrix_2, self.transform_matrix_1))
-        #     transformed_moving_detections = apply_affine_transform(transformed_moving_detections,
-        #                                                            self.transform_matrix_icp)
-        # else:
-        #     pass
-        # TODO uncomment ?
-
-        # self.transform_matrix_combined = np.matmul(self.transform_matrix_2, self.transform_matrix_1)
-
         # then apply linear sum assignment between transformed moving detections and fixed detections
         cost_matrix = cdist(transformed_moving_detections.transpose(), self.fixed_detections.transpose())
         row_indices, col_indices = linear_sum_assignment(cost_matrix)
@@ -1077,6 +1063,7 @@ class EvaluateMetrics(QWidget):
         print("=" * 25)
 
         # self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(moving_dictionary.keys()))) # TODO
+        # TODO --> should this be made symmetric?
         self.matching_accuracy_linedit.setText("{:.3f}".format(hits / len(fixed_dictionary.keys())))  # TODO
         print("Matching Accuracy is equal to {}".format(self.matching_accuracy_linedit.text()))
 
@@ -1170,13 +1157,14 @@ class EvaluateMetrics(QWidget):
             self.fixed_image_combobox.addItem(layer.name)
 
 
-class NonLinearTransform(QWidget):
-    # Non Rigid Transform (Simple ITK)
-    # Voxel Morph
-    def __init__(self, napari_viewer):
-        pass
+# class NonLinearTransform(QWidget):
+#     # Non Rigid Transform (Simple ITK)
+#     # Voxel Morph
+#     def __init__(self, napari_viewer):
+#         pass
 
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
-    return [DetectNuclei, EstimateTransform, EvaluateMetrics, NonLinearTransform]
+    return [DetectNuclei, EstimateTransform, EvaluateMetrics]
+    #return [DetectNuclei, EstimateTransform, EvaluateMetrics, NonLinearTransform]
