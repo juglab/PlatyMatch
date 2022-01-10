@@ -36,7 +36,11 @@ You can install `PlatyMatch` via **[pip]**:
 ```
 conda create -y -n PlatyMatchEnv python==3.8
 conda activate PlatyMatchEnv
-python3 -m pip install PlatyMatch
+python -m pip install "napari[all]"
+git clone https://github.com/juglab/PlatyMatch.git
+cd PlatyMatch
+git checkout v0.0.4
+pip install -e .
 ```
 
 ### Getting Started

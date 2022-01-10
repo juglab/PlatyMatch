@@ -25,11 +25,11 @@ def _browse_detections(self):
         detections_df = pd.read_csv(name[0], skiprows=None, delimiter=' ', header=None)
     detections_numpy = detections_df.to_numpy()
     ids = detections_numpy[:, 0]  # first column should contain ids
-    detections = detections_numpy[:, 1:4] # N x 3
+    detections = detections_numpy[:, 1:4].astype(np.float) # N x 3
     if self.izyx_checkbox.isChecked():
         pass
     else:
-        detections = np.flip(detections, 1) # N x 3
+        detections = np.flip(detections, 1) # N x 3 --> make everything z y x style!
 
     return detections.transpose(), ids.transpose() # 3 x N, 1 x N
 
@@ -38,8 +38,8 @@ def _browse_transform(self):
     name = QFileDialog.getOpenFileName(self, 'Open File')  # this returns a tuple!
     print("Opening transform {} ******".format(name[0]))
     transform_df = pd.read_csv(name[0], skiprows=None, delimiter=' ', header= None)
-    transform_numpy = transform_df.to_numpy()
-    assert (transform_numpy.shape==(4,4)), 'Loaded transform does not hasve shape 4 x 4'
+    transform_numpy = transform_df.to_numpy().astype(np.float)
+    assert (transform_numpy.shape==(4,4)), 'Loaded transform does not have shape 4 x 4'
     return transform_numpy # 4 x 4
 
 
@@ -47,7 +47,7 @@ def _browse_transform(self):
 
 def get_centroid(detections, transposed = True):
     """
-    :param detections: N x 3/4 or 3/4 x N
+    :param detections: N x 3/4 (transpposed = True) or 3/4 x N (transposed = False)
     :return: 3 x 1
     """
     if (transposed):  # N x 4
@@ -55,16 +55,16 @@ def get_centroid(detections, transposed = True):
     else: # 4 x N
         return np.mean(detections[:3, :], 1, keepdims=True)
 
-def get_mean_distance(detections, transposed = False):
+def get_mean_distance(detections, transposed = True):
     """
     :param detections: 3 x N
     :return:
     """
 
-    if (transposed): # 3 x N
+    if (transposed): # N x 3
         pass
-    else: # N x 3
-        detections = detections.transpose() # N x 3
+    else: # 3/4 x N as intended
+        detections = detections.transpose() # N x 3/4
 
     if detections.shape[1] == 4:
         detections = detections[:, :3] # N x 3

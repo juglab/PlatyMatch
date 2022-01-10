@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.spatial import distance_matrix
-from platymatch.estimate_transform.find_transform import get_affine_transform
+from platymatch.estimate_transform.find_transform import get_affine_transform, get_similar_transform
 from platymatch.estimate_transform.apply_transform import apply_affine_transform
 from platymatch.utils.utils import get_error
 
@@ -16,10 +16,10 @@ def perform_icp(moving, fixed, icp_iterations = 50, transform='Affine'):
         i2=np.argmin(cost_matrix, 1)
         if(transform=='Affine'):
             A_est=get_affine_transform(moving, fixed[:, i2])
-        elif(transform=='similar'):
+        elif(transform=='Similar'):
             A_est = get_similar_transform(moving, fixed[:, i2])
-        elif(transform=='rigid'):
-            A_est = get_rigid_transform(moving, fixed[:, i2])
+        # elif(transform=='Rigid'):
+        #     A_est = get_rigid_transform(moving, fixed[:, i2])
         moving = apply_affine_transform(moving, A_est)
         print("Residual at iteration {} is {}".format(str(i), get_error(moving, fixed[:, i2])))
         A_icp=np.matmul(A_est, A_icp)

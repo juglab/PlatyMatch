@@ -26,7 +26,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='PlatyMatch',
-    version='0.0.3',
+    version='0.0.4',
     author='Manan Lalit',
     author_email='lalit@mpi-cbg.de',
     license='CC-BY-NC-4.0',
@@ -42,7 +42,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'Framework :: napari',
+        #'Framework :: napari',
         'Topic :: Software Development :: Testing',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
