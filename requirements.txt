@@ -4,6 +4,7 @@ scikit-image
 scikit-learn
 tqdm
 simpleitk
-napari[all]
+napari
 pandas
 pytest
+qtpy
