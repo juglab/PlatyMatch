@@ -2,8 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://img.shields.io/pypi/v/PlatyMatch.svg?color=green)](https://pypi.org/project/PlatyMatch)
 [![Python Version](https://img.shields.io/pypi/pyversions/PlatyMatch.svg?color=green)](https://python.org)
-[![tests](https://github.com/juglab/PlatyMatch/workflows/tests/badge.svg)](https://github.com/juglab/PlatyMatch/actions)
-[![codecov](https://codecov.io/gh/juglab/PlatyMatch/branch/master/graph/badge.svg)](https://codecov.io/gh/juglab/PlatyMatch)
+
 
 
 <p align="center">
