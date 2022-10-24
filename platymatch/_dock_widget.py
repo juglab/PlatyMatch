@@ -2,9 +2,9 @@ import SimpleITK as sitk
 import csv
 import numpy as np
 import tifffile
-from PyQt5.QtCore import Qt
 from napari.qt.threading import thread_worker
 from napari_plugin_engine import napari_hook_implementation
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QPushButton, QCheckBox, QLabel, QComboBox, QLineEdit, \
     QFileDialog, QProgressBar
 from scipy.optimize import linear_sum_assignment
